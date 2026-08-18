@@ -1,6 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 function Sidebar() {
+  const { t } = useTranslation()
+
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
@@ -9,31 +12,31 @@ function Sidebar() {
 
       <nav className="sidebar-nav">
         <NavLink to="/dashboard">
-          Dashboard
+          {t('navigation.dashboard')}
         </NavLink>
 
         <NavLink to="/accounts">
-          Accounts
+          {t('navigation.accounts')}
         </NavLink>
 
         <NavLink to="/transactions">
-          Transactions
+          {t('navigation.transactions')}
         </NavLink>
 
         <NavLink to="/debts">
-          Debts
+          {t('navigation.debts')}
         </NavLink>
 
         <NavLink to="/reports">
-          Reports
+          {t('navigation.reports')}
         </NavLink>
 
         <NavLink to="/settings">
-          Settings
+          {t('navigation.settings')}
         </NavLink>
       </nav>
     </aside>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
