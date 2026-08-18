@@ -10,6 +10,7 @@ import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import Categories from './pages/Categories'
 
 import ProtectedRoute from './routes/ProtectedRoute'
 
@@ -27,6 +28,7 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/accounts" element={<Accounts />} />
+            <Route path="/categories" element={<Categories />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/debts" element={<Debts />} />
             <Route path="/reports" element={<Reports />} />

@@ -1,0 +1,128 @@
+.categories-page {
+  width: 100%;
+}
+
+.categories-header {
+  margin-bottom: 24px;
+}
+
+.categories-header h1 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.categories-header p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+}
+
+.category-form-section,
+.categories-list-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.category-form-section h2,
+.categories-list-section h2 {
+  margin: 0 0 20px;
+  color: var(--text-primary);
+}
+
+.category-form-section form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+}
+
+.category-form-section label,
+.category-edit-form label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.category-form-section input,
+.category-form-section select,
+.category-edit-form input,
+.category-edit-form select {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.category-form-section input:focus,
+.category-form-section select:focus,
+.category-edit-form input:focus,
+.category-edit-form select:focus {
+  border-color: var(--primary);
+}
+
+.categories-list-section > div > div {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.categories-list-section > div > div:last-child {
+  border-bottom: none;
+}
+
+.categories-list-section h3 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.categories-list-section p {
+  margin: 6px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.categories-list-section button {
+  margin-top: 12px;
+  margin-right: 8px;
+}
+
+.category-edit-form {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--background);
+}
+
+.category-edit-form h3 {
+  margin-bottom: 18px;
+}
+
+.category-edit-form form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.category-edit-form button {
+  min-height: 42px;
+}
+
+@media (max-width: 768px) {
+  .category-form-section form,
+  .category-edit-form form {
+    grid-template-columns: 1fr;
+  }
+
+  .category-form-section,
+  .categories-list-section {
+    padding: 18px;
+  }
+}
