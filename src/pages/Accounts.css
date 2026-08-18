@@ -1,0 +1,135 @@
+.accounts-page {
+  width: 100%;
+}
+
+.accounts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.accounts-header h1 {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.accounts-header p {
+  margin: 6px 0 0;
+  color: var(--text-secondary);
+}
+
+.account-form-section,
+.accounts-list-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.account-form-section h2,
+.accounts-list-section h2 {
+  margin: 0 0 20px;
+  color: var(--text-primary);
+}
+
+.account-form-section form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: end;
+}
+
+.account-form-section form button {
+  min-height: 42px;
+}
+
+.account-form-section label,
+.account-edit-form label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.account-form-section input,
+.account-form-section select,
+.account-edit-form input,
+.account-edit-form select {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  color: var(--text-primary);
+  outline: none;
+}
+
+.account-form-section input:focus,
+.account-form-section select:focus,
+.account-edit-form input:focus,
+.account-edit-form select:focus {
+  border-color: var(--primary);
+}
+
+.accounts-list-section > div > div {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.accounts-list-section > div > div:last-child {
+  border-bottom: none;
+}
+
+.accounts-list-section h3 {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+}
+
+.accounts-list-section p {
+  margin: 6px 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.accounts-list-section button {
+  margin-top: 12px;
+  margin-right: 8px;
+}
+
+.account-edit-form {
+  margin-top: 18px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--background);
+}
+
+.account-edit-form h3 {
+  margin-bottom: 18px;
+}
+
+.account-edit-form form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.account-edit-form button {
+  min-height: 42px;
+}
+
+@media (max-width: 768px) {
+  .account-form-section form,
+  .account-edit-form form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-form-section,
+  .accounts-list-section {
+    padding: 18px;
+  }
+}
