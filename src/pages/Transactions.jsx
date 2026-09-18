@@ -1,9 +1,30 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Wallet,
+  Tag,
+  CalendarDays,
+  FileText,
+  UserRound,
+  Pencil,
+  Trash2,
+  Plus,
+  X,
+  Save,
+  CircleDollarSign,
+} from 'lucide-react'
+
 import { useTransactions } from '../hooks/useTransactions'
 import { useAccounts } from '../hooks/useAccounts'
 import { useCategories } from '../hooks/useCategories'
 
+import './Transactions.css'
+
 function Transactions() {
+  const { t, i18n } = useTranslation()
+
   const {
     transactions,
     loading,
@@ -44,7 +65,8 @@ function Transactions() {
   const [success, setSuccess] = useState('')
 
   // Edit state
-  const [editingTransaction, setEditingTransaction] = useState(null)
+  const [editingTransaction, setEditingTransaction] =
+    useState(null)
 
   const [editType, setEditType] = useState('income')
   const [editTitle, setEditTitle] = useState('')
@@ -53,7 +75,8 @@ function Transactions() {
   const [editTotalAmount, setEditTotalAmount] = useState('')
   const [editPaidAmount, setEditPaidAmount] = useState('')
   const [editPartyName, setEditPartyName] = useState('')
-  const [editTransactionDate, setEditTransactionDate] = useState('')
+  const [editTransactionDate, setEditTransactionDate] =
+    useState('')
   const [editNotes, setEditNotes] = useState('')
 
   const [editSaving, setEditSaving] = useState(false)
@@ -64,7 +87,8 @@ function Transactions() {
 
   // Add outstanding
   const outstanding =
-    Number(totalAmount || 0) - Number(paidAmount || 0)
+    Number(totalAmount || 0) -
+    Number(paidAmount || 0)
 
   // Edit categories
   const {
@@ -75,6 +99,37 @@ function Transactions() {
   const editOutstanding =
     Number(editTotalAmount || 0) -
     Number(editPaidAmount || 0)
+
+  // -----------------------------
+  // Helpers
+  // -----------------------------
+
+  const formatAmount = (amount, currency = 'EGP') => {
+    return `${Number(amount || 0).toLocaleString(
+      'en-US',
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }
+    )} ${currency}`
+  }
+
+  const formatDate = (date) => {
+    if (!date) return '-'
+
+    return new Date(
+      `${date}T00:00:00`
+    ).toLocaleDateString(
+      i18n.language === 'ar'
+        ? 'ar-EG'
+        : 'en-US',
+      {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }
+    )
+  }
 
   // -----------------------------
   // Type Change
@@ -103,22 +158,30 @@ function Transactions() {
     setSuccess('')
 
     if (!title.trim()) {
-      setFormError('Please enter a transaction title.')
+      setFormError(
+        t('transactions.pleaseEnterTitle')
+      )
       return
     }
 
     if (!accountId) {
-      setFormError('Please select an account.')
+      setFormError(
+        t('transactions.pleaseSelectAccount')
+      )
       return
     }
 
     if (!categoryId) {
-      setFormError('Please select a category.')
+      setFormError(
+        t('transactions.pleaseSelectCategory')
+      )
       return
     }
 
     if (totalAmount === '') {
-      setFormError('Please enter the total amount.')
+      setFormError(
+        t('transactions.pleaseEnterTotal')
+      )
       return
     }
 
@@ -129,7 +192,9 @@ function Transactions() {
       !Number.isFinite(numericTotal) ||
       numericTotal <= 0
     ) {
-      setFormError('Please enter a valid total amount.')
+      setFormError(
+        t('transactions.invalidTotal')
+      )
       return
     }
 
@@ -137,13 +202,15 @@ function Transactions() {
       !Number.isFinite(numericPaid) ||
       numericPaid < 0
     ) {
-      setFormError('Please enter a valid paid amount.')
+      setFormError(
+        t('transactions.invalidPaid')
+      )
       return
     }
 
     if (numericPaid > numericTotal) {
       setFormError(
-        'Paid amount cannot be greater than total amount.'
+        t('transactions.paidGreaterThanTotal')
       )
       return
     }
@@ -157,8 +224,12 @@ function Transactions() {
     ) {
       setFormError(
         type === 'income'
-          ? 'Please enter who owes you.'
-          : 'Please enter who you owe.'
+          ? t(
+              'transactions.pleaseEnterWhoOwesYou'
+            )
+          : t(
+              'transactions.pleaseEnterWhoYouOwe'
+            )
       )
       return
     }
@@ -197,10 +268,16 @@ function Transactions() {
     setPartyName('')
     setNotes('')
 
-    setSuccess('Transaction created successfully.')
+    setSuccess(
+      t('transactions.transactionCreated')
+    )
+
     setSaving(false)
 
-    console.log('Created transaction:', transaction)
+    console.log(
+      'Created transaction:',
+      transaction
+    )
   }
 
   // -----------------------------
@@ -216,9 +293,15 @@ function Transactions() {
     setEditCategoryId(transaction.category_id)
     setEditTotalAmount(transaction.total_amount)
     setEditPaidAmount(transaction.paid_amount)
-    setEditPartyName(transaction.party_name || '')
-    setEditTransactionDate(transaction.transaction_date)
-    setEditNotes(transaction.notes || '')
+    setEditPartyName(
+      transaction.party_name || ''
+    )
+    setEditTransactionDate(
+      transaction.transaction_date
+    )
+    setEditNotes(
+      transaction.notes || ''
+    )
 
     setEditError('')
     setSuccess('')
@@ -236,33 +319,46 @@ function Transactions() {
     setSuccess('')
 
     if (!editTitle.trim()) {
-      setEditError('Please enter a transaction title.')
+      setEditError(
+        t('transactions.pleaseEnterTitle')
+      )
       return
     }
 
     if (!editAccountId) {
-      setEditError('Please select an account.')
+      setEditError(
+        t('transactions.pleaseSelectAccount')
+      )
       return
     }
 
     if (!editCategoryId) {
-      setEditError('Please select a category.')
+      setEditError(
+        t('transactions.pleaseSelectCategory')
+      )
       return
     }
 
     if (editTotalAmount === '') {
-      setEditError('Please enter the total amount.')
+      setEditError(
+        t('transactions.pleaseEnterTotal')
+      )
       return
     }
 
-    const numericTotal = Number(editTotalAmount)
-    const numericPaid = Number(editPaidAmount || 0)
+    const numericTotal =
+      Number(editTotalAmount)
+
+    const numericPaid =
+      Number(editPaidAmount || 0)
 
     if (
       !Number.isFinite(numericTotal) ||
       numericTotal <= 0
     ) {
-      setEditError('Please enter a valid total amount.')
+      setEditError(
+        t('transactions.invalidTotal')
+      )
       return
     }
 
@@ -270,13 +366,17 @@ function Transactions() {
       !Number.isFinite(numericPaid) ||
       numericPaid < 0
     ) {
-      setEditError('Please enter a valid paid amount.')
+      setEditError(
+        t('transactions.invalidPaid')
+      )
       return
     }
 
     if (numericPaid > numericTotal) {
       setEditError(
-        'Paid amount cannot be greater than total amount.'
+        t(
+          'transactions.paidGreaterThanTotal'
+        )
       )
       return
     }
@@ -290,8 +390,12 @@ function Transactions() {
     ) {
       setEditError(
         editType === 'income'
-          ? 'Please enter who owes you.'
-          : 'Please enter who you owe.'
+          ? t(
+              'transactions.pleaseEnterWhoOwesYou'
+            )
+          : t(
+              'transactions.pleaseEnterWhoYouOwe'
+            )
       )
       return
     }
@@ -320,7 +424,9 @@ function Transactions() {
     )
 
     if (updateError) {
-      setEditError(updateError.message)
+      setEditError(
+        updateError.message
+      )
       setEditSaving(false)
       return
     }
@@ -328,9 +434,14 @@ function Transactions() {
     setEditingTransaction(null)
     setEditSaving(false)
 
-    setSuccess('Transaction updated successfully.')
+    setSuccess(
+      t('transactions.transactionUpdated')
+    )
 
-    console.log('Updated transaction:', transaction)
+    console.log(
+      'Updated transaction:',
+      transaction
+    )
   }
 
   // -----------------------------
@@ -338,9 +449,10 @@ function Transactions() {
   // -----------------------------
 
   const handleDelete = async (id) => {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this transaction?'
-    )
+    const confirmed =
+      window.confirm(
+        t('transactions.confirmDelete')
+      )
 
     if (!confirmed) return
 
@@ -348,57 +460,166 @@ function Transactions() {
     setFormError('')
     setSuccess('')
 
-    const { error: deleteError } =
-      await removeTransaction(id)
+    const {
+      error: deleteError,
+    } = await removeTransaction(id)
 
     if (deleteError) {
-      setFormError(deleteError.message)
+      setFormError(
+        deleteError.message
+      )
       setDeletingId(null)
       return
     }
 
-    if (editingTransaction?.id === id) {
+    if (
+      editingTransaction?.id === id
+    ) {
       setEditingTransaction(null)
     }
 
     setDeletingId(null)
-    setSuccess('Transaction deleted successfully.')
+
+    setSuccess(
+      t('transactions.transactionDeleted')
+    )
   }
 
   return (
     <div className="transactions-page">
 
+      {/* =========================
+          Header
+      ========================= */}
+
       <div className="transactions-header">
+
         <div>
-          <h1>Transactions</h1>
-          <p>Manage your income and expenses.</p>
+          <h1>
+            {t('transactions.title')}
+          </h1>
+
+          <p>
+            {t('transactions.subtitle')}
+          </p>
         </div>
+
+        <button
+          type="button"
+          className="primary-button transactions-add-button"
+          onClick={() =>
+            document
+              .getElementById(
+                'add-transaction-form'
+              )
+              ?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              })
+          }
+        >
+          <Plus
+            size={17}
+            strokeWidth={2.5}
+          />
+
+          <span>
+            {t(
+              'transactions.addTransaction'
+            )}
+          </span>
+        </button>
+
       </div>
 
-      {/* Add Transaction */}
+      {/* =========================
+          Messages
+      ========================= */}
 
-      <div className="transaction-form-section">
+      {success && (
+        <div className="transaction-message transaction-success">
+          {success}
+        </div>
+      )}
 
-        <h2>Add Transaction</h2>
+      {formError && (
+        <div className="transaction-message transaction-error">
+          {formError}
+        </div>
+      )}
+
+      {/* =========================
+          Add Transaction
+      ========================= */}
+
+      <section
+        id="add-transaction-form"
+        className="transaction-form-section"
+      >
+
+        <div className="transaction-section-heading">
+
+          <div className="transaction-section-icon">
+            <CircleDollarSign
+              size={19}
+              strokeWidth={2}
+            />
+          </div>
+
+          <div>
+            <h2>
+              {t(
+                'transactions.addTransaction'
+              )}
+            </h2>
+
+            <p>
+              {t(
+                'transactions.subtitle'
+              )}
+            </p>
+          </div>
+
+        </div>
 
         <form onSubmit={handleSubmit}>
 
-          <div>
-            <label>Type</label>
+          {/* Type */}
+
+          <div className="transaction-form-field">
+
+            <label>
+              {t('transactions.type')}
+            </label>
 
             <select
               value={type}
               onChange={(e) =>
-                handleTypeChange(e.target.value)
+                handleTypeChange(
+                  e.target.value
+                )
               }
             >
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
+              <option value="income">
+                {t('transactions.income')}
+              </option>
+
+              <option value="expense">
+                {t('transactions.expense')}
+              </option>
             </select>
+
           </div>
 
-          <div>
-            <label>Title</label>
+          {/* Title */}
+
+          <div className="transaction-form-field">
+
+            <label>
+              {t(
+                'transactions.titleLabel'
+              )}
+            </label>
 
             <input
               type="text"
@@ -406,70 +627,113 @@ function Transactions() {
               onChange={(e) =>
                 setTitle(e.target.value)
               }
-              placeholder="e.g. Shopify Project"
+              placeholder={t(
+                'transactions.titlePlaceholder'
+              )}
             />
+
           </div>
 
-          <div>
-            <label>Category</label>
+          {/* Category */}
+
+          <div className="transaction-form-field">
+
+            <label>
+              {t(
+                'transactions.category'
+              )}
+            </label>
 
             <select
               value={categoryId}
               onChange={(e) =>
-                setCategoryId(e.target.value)
+                setCategoryId(
+                  e.target.value
+                )
               }
               disabled={categoriesLoading}
             >
               <option value="">
                 {categoriesLoading
-                  ? 'Loading categories...'
-                  : 'Select category'}
+                  ? t(
+                      'transactions.loadingCategories'
+                    )
+                  : t(
+                      'transactions.selectCategory'
+                    )}
               </option>
 
-              {categories.map((category) => (
-                <option
-                  key={category.id}
-                  value={category.id}
-                >
-                  {category.name}
-                </option>
-              ))}
+              {categories.map(
+                (category) => (
+                  <option
+                    key={category.id}
+                    value={category.id}
+                  >
+                    {category.name}
+                  </option>
+                )
+              )}
             </select>
+
           </div>
 
-          <div>
+          {/* Account */}
+
+          <div className="transaction-form-field">
+
             <label>
               {type === 'income'
-                ? 'Paid Into Account'
-                : 'Paid From Account'}
+                ? t(
+                    'transactions.paidIntoAccount'
+                  )
+                : t(
+                    'transactions.paidFromAccount'
+                  )}
             </label>
 
             <select
               value={accountId}
               onChange={(e) =>
-                setAccountId(e.target.value)
+                setAccountId(
+                  e.target.value
+                )
               }
               disabled={accountsLoading}
             >
               <option value="">
                 {accountsLoading
-                  ? 'Loading accounts...'
-                  : 'Select account'}
+                  ? t(
+                      'transactions.loadingAccounts'
+                    )
+                  : t(
+                      'transactions.selectAccount'
+                    )}
               </option>
 
-              {accounts.map((account) => (
-                <option
-                  key={account.id}
-                  value={account.id}
-                >
-                  {account.name} ({account.currency})
-                </option>
-              ))}
+              {accounts.map(
+                (account) => (
+                  <option
+                    key={account.id}
+                    value={account.id}
+                  >
+                    {account.name} (
+                    {account.currency})
+                  </option>
+                )
+              )}
             </select>
+
           </div>
 
-          <div>
-            <label>Total Amount</label>
+          {/* Total */}
+
+          <div className="transaction-form-field">
+
+            <label>
+              {t(
+                'transactions.totalAmount'
+              )}
+            </label>
 
             <input
               type="number"
@@ -477,14 +741,24 @@ function Transactions() {
               step="0.01"
               value={totalAmount}
               onChange={(e) =>
-                setTotalAmount(e.target.value)
+                setTotalAmount(
+                  e.target.value
+                )
               }
               placeholder="0.00"
             />
+
           </div>
 
-          <div>
-            <label>Paid Amount</label>
+          {/* Paid */}
+
+          <div className="transaction-form-field">
+
+            <label>
+              {t(
+                'transactions.paidAmount'
+              )}
+            </label>
 
             <input
               type="number"
@@ -492,460 +766,985 @@ function Transactions() {
               step="0.01"
               value={paidAmount}
               onChange={(e) =>
-                setPaidAmount(e.target.value)
+                setPaidAmount(
+                  e.target.value
+                )
               }
               placeholder="0.00"
             />
+
           </div>
 
-          <div>
-            <label>Outstanding</label>
+          {/* Outstanding */}
 
-            <input
-              type="text"
-              value={
-                outstanding >= 0
-                  ? outstanding.toFixed(2)
-                  : '0.00'
-              }
-              readOnly
-            />
+          <div className="transaction-form-field">
+
+            <label>
+              {t(
+                'transactions.outstanding'
+              )}
+            </label>
+
+            <div
+              className={`transaction-outstanding-input ${
+                outstanding > 0
+                  ? 'has-outstanding'
+                  : ''
+              }`}
+            >
+              {outstanding >= 0
+                ? outstanding.toFixed(2)
+                : '0.00'}
+            </div>
+
           </div>
+
+          {/* Party */}
 
           {outstanding > 0 && (
-            <div>
+            <div className="transaction-form-field">
+
               <label>
                 {type === 'income'
-                  ? 'Who owes you?'
-                  : 'Who do you owe?'}
+                  ? t(
+                      'transactions.whoOwesYou'
+                    )
+                  : t(
+                      'transactions.whoDoYouOwe'
+                    )}
               </label>
 
               <input
                 type="text"
                 value={partyName}
                 onChange={(e) =>
-                  setPartyName(e.target.value)
+                  setPartyName(
+                    e.target.value
+                  )
                 }
                 placeholder={
                   type === 'income'
-                    ? 'e.g. ABC Company'
-                    : 'e.g. Laptop Store'
+                    ? t(
+                        'transactions.owedYouPlaceholder'
+                      )
+                    : t(
+                        'transactions.owePlaceholder'
+                      )
                 }
               />
+
             </div>
           )}
 
-          <div>
-            <label>Date</label>
+          {/* Date */}
+
+          <div className="transaction-form-field">
+
+            <label>
+              {t('transactions.date')}
+            </label>
 
             <input
               type="date"
               value={transactionDate}
               onChange={(e) =>
-                setTransactionDate(e.target.value)
+                setTransactionDate(
+                  e.target.value
+                )
               }
             />
+
           </div>
 
-          <div>
-            <label>Notes</label>
+          {/* Notes */}
+
+          <div className="transaction-form-field transaction-notes-field">
+
+            <label>
+              {t('transactions.notes')}
+            </label>
 
             <textarea
               value={notes}
               onChange={(e) =>
-                setNotes(e.target.value)
+                setNotes(
+                  e.target.value
+                )
               }
-              placeholder="Optional notes..."
+              placeholder={t(
+                'transactions.notesPlaceholder'
+              )}
               rows="3"
             />
+
           </div>
 
           <button
             type="submit"
-            className="primary-button"
+            className={`primary-button transaction-submit-button ${
+              type === 'expense'
+                ? 'expense-submit'
+                : ''
+            }`}
             disabled={saving}
           >
-            {saving
-              ? 'Creating...'
-              : 'Create Transaction'}
+            {saving ? (
+              t('transactions.creating')
+            ) : (
+              <>
+                <Plus
+                  size={16}
+                  strokeWidth={2.5}
+                />
+
+                {t(
+                  'transactions.createTransaction'
+                )}
+              </>
+            )}
           </button>
-
-          {formError && <p>{formError}</p>}
-
-          {success && <p>{success}</p>}
 
         </form>
 
-      </div>
+      </section>
 
-      {/* Transactions List */}
+      {/* =========================
+          Transactions List
+      ========================= */}
 
-      <div className="transactions-list-section">
+      <section className="transactions-list-section">
 
-        <h2>Recent Transactions</h2>
+        <div className="transactions-list-header">
+
+          <div>
+            <h2>
+              {t(
+                'transactions.recentTransactions'
+              )}
+            </h2>
+
+            <p>
+              {transactions.length}{' '}
+              {transactions.length === 1
+                ? 'transaction'
+                : 'transactions'}
+            </p>
+          </div>
+
+        </div>
+
+        {/* Loading */}
 
         {loading && (
-          <p>Loading transactions...</p>
+          <div className="transactions-state">
+
+            <div className="transactions-loading-spinner" />
+
+            <p>
+              {t(
+                'transactions.loadingTransactions'
+              )}
+            </p>
+
+          </div>
         )}
 
+        {/* Error */}
+
         {!loading && error && (
-          <p>{error.message}</p>
+          <div className="transactions-state transactions-state-error">
+            <p>
+              {error.message}
+            </p>
+          </div>
         )}
+
+        {/* Empty */}
 
         {!loading &&
           !error &&
           transactions.length === 0 && (
-            <p>No transactions yet.</p>
-          )}
+            <div className="transactions-state">
 
-        {!loading &&
-          !error &&
-          transactions.length > 0 && (
-            <div>
+              <div className="transactions-empty-icon">
+                <FileText
+                  size={28}
+                  strokeWidth={1.8}
+                />
+              </div>
 
-              {transactions.map((transaction) => {
-
-                const outstandingAmount =
-                  Number(transaction.total_amount) -
-                  Number(transaction.paid_amount)
-
-                return (
-                  <div key={transaction.id}>
-
-                    <h3>{transaction.title}</h3>
-
-                    <p>
-                      Type: {transaction.type}
-                    </p>
-
-                    <p>
-                      Category:{' '}
-                      {transaction.categories?.name}
-                    </p>
-
-                    <p>
-                      Account:{' '}
-                      {transaction.accounts?.name}
-                    </p>
-
-                    <p>
-                      Total:{' '}
-                      {transaction.total_amount}{' '}
-                      {transaction.accounts?.currency}
-                    </p>
-
-                    <p>
-                      Paid:{' '}
-                      {transaction.paid_amount}{' '}
-                      {transaction.accounts?.currency}
-                    </p>
-
-                    <p>
-                      Outstanding:{' '}
-                      {outstandingAmount}{' '}
-                      {transaction.accounts?.currency}
-                    </p>
-
-                    {transaction.party_name && (
-                      <p>
-                        {transaction.type === 'income'
-                          ? 'Owes you:'
-                          : 'You owe:'}{' '}
-                        {transaction.party_name}
-                      </p>
-                    )}
-
-                    <p>
-                      Date:{' '}
-                      {transaction.transaction_date}
-                    </p>
-
-                    {transaction.notes && (
-                      <p>
-                        Notes: {transaction.notes}
-                      </p>
-                    )}
-
-                    <button
-                      type="button"
-                      className="secondary-button"
-                      onClick={() =>
-                        handleEditClick(transaction)
-                      }
-                      disabled={deletingId === transaction.id}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      type="button"
-                      className="secondary-button"
-                      onClick={() =>
-                        handleDelete(transaction.id)
-                      }
-                      disabled={deletingId === transaction.id}
-                    >
-                      {deletingId === transaction.id
-                        ? 'Deleting...'
-                        : 'Delete'}
-                    </button>
-
-                    {/* Edit Form */}
-
-                    {editingTransaction?.id ===
-                      transaction.id && (
-                      <div className="transaction-edit-form">
-
-                        <h3>Edit Transaction</h3>
-
-                        <form onSubmit={handleEditSubmit}>
-
-                          <div>
-                            <label>Type</label>
-
-                            <select
-                              value={editType}
-                              onChange={(e) =>
-                                handleEditTypeChange(
-                                  e.target.value
-                                )
-                              }
-                            >
-                              <option value="income">
-                                Income
-                              </option>
-
-                              <option value="expense">
-                                Expense
-                              </option>
-                            </select>
-                          </div>
-
-                          <div>
-                            <label>Title</label>
-
-                            <input
-                              type="text"
-                              value={editTitle}
-                              onChange={(e) =>
-                                setEditTitle(
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-
-                          <div>
-                            <label>Category</label>
-
-                            <select
-                              value={editCategoryId}
-                              onChange={(e) =>
-                                setEditCategoryId(
-                                  e.target.value
-                                )
-                              }
-                              disabled={
-                                editCategoriesLoading
-                              }
-                            >
-                              <option value="">
-                                {editCategoriesLoading
-                                  ? 'Loading categories...'
-                                  : 'Select category'}
-                              </option>
-
-                              {editCategories.map(
-                                (category) => (
-                                  <option
-                                    key={category.id}
-                                    value={category.id}
-                                  >
-                                    {category.name}
-                                  </option>
-                                )
-                              )}
-                            </select>
-                          </div>
-
-                          <div>
-                            <label>
-                              {editType === 'income'
-                                ? 'Paid Into Account'
-                                : 'Paid From Account'}
-                            </label>
-
-                            <select
-                              value={editAccountId}
-                              onChange={(e) =>
-                                setEditAccountId(
-                                  e.target.value
-                                )
-                              }
-                              disabled={accountsLoading}
-                            >
-                              <option value="">
-                                {accountsLoading
-                                  ? 'Loading accounts...'
-                                  : 'Select account'}
-                              </option>
-
-                              {accounts.map(
-                                (account) => (
-                                  <option
-                                    key={account.id}
-                                    value={account.id}
-                                  >
-                                    {account.name} (
-                                    {account.currency})
-                                  </option>
-                                )
-                              )}
-                            </select>
-                          </div>
-
-                          <div>
-                            <label>
-                              Total Amount
-                            </label>
-
-                            <input
-                              type="number"
-                              min="0"
-                              step="0.01"
-                              value={editTotalAmount}
-                              onChange={(e) =>
-                                setEditTotalAmount(
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-
-                          <div>
-                            <label>
-                              Paid Amount
-                            </label>
-
-                            <input
-                              type="number"
-                              min="0"
-                              step="0.01"
-                              value={editPaidAmount}
-                              onChange={(e) =>
-                                setEditPaidAmount(
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-
-                          <div>
-                            <label>
-                              Outstanding
-                            </label>
-
-                            <input
-                              type="text"
-                              value={
-                                editOutstanding >= 0
-                                  ? editOutstanding.toFixed(2)
-                                  : '0.00'
-                              }
-                              readOnly
-                            />
-                          </div>
-
-                          {editOutstanding > 0 && (
-                            <div>
-                              <label>
-                                {editType === 'income'
-                                  ? 'Who owes you?'
-                                  : 'Who do you owe?'}
-                              </label>
-
-                              <input
-                                type="text"
-                                value={editPartyName}
-                                onChange={(e) =>
-                                  setEditPartyName(
-                                    e.target.value
-                                  )
-                                }
-                                placeholder={
-                                  editType === 'income'
-                                    ? 'e.g. ABC Company'
-                                    : 'e.g. Laptop Store'
-                                }
-                              />
-                            </div>
-                          )}
-
-                          <div>
-                            <label>Date</label>
-
-                            <input
-                              type="date"
-                              value={
-                                editTransactionDate
-                              }
-                              onChange={(e) =>
-                                setEditTransactionDate(
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-
-                          <div>
-                            <label>Notes</label>
-
-                            <textarea
-                              value={editNotes}
-                              onChange={(e) =>
-                                setEditNotes(
-                                  e.target.value
-                                )
-                              }
-                              rows="3"
-                            />
-                          </div>
-
-                          <button
-                            type="submit"
-                            className="primary-button"
-                            disabled={editSaving}
-                          >
-                            {editSaving
-                              ? 'Saving...'
-                              : 'Save Changes'}
-                          </button>
-
-                          <button
-                            type="button"
-                            className="secondary-button"
-                            onClick={handleCancelEdit}
-                          >
-                            Cancel
-                          </button>
-
-                          {editError && (
-                            <p>{editError}</p>
-                          )}
-
-                        </form>
-
-                      </div>
-                    )}
-
-                  </div>
-                )
-              })}
+              <h3>
+                {t(
+                  'transactions.noTransactions'
+                )}
+              </h3>
 
             </div>
           )}
 
-      </div>
+        {/* Cards */}
+
+        {!loading &&
+          !error &&
+          transactions.length > 0 && (
+
+            <div className="transactions-grid">
+
+              {transactions.map(
+                (transaction) => {
+
+                  const isIncome =
+                    transaction.type ===
+                    'income'
+
+                  const outstandingAmount =
+                    Number(
+                      transaction.total_amount
+                    ) -
+                    Number(
+                      transaction.paid_amount
+                    )
+
+                  const currency =
+                    transaction.accounts
+                      ?.currency || 'EGP'
+
+                  return (
+
+                    <article
+                      key={transaction.id}
+                      className={`transaction-card ${
+                        isIncome
+                          ? 'transaction-income'
+                          : 'transaction-expense'
+                      } ${
+                        editingTransaction?.id ===
+                        transaction.id
+                          ? 'transaction-card-editing'
+                          : ''
+                      }`}
+                    >
+
+                      {/* Card Top */}
+
+                      <div className="transaction-card-top">
+
+                        <div className="transaction-type-wrapper">
+
+                          <div
+                            className={`transaction-type-icon ${
+                              isIncome
+                                ? 'transaction-income-icon'
+                                : 'transaction-expense-icon'
+                            }`}
+                          >
+                            {isIncome ? (
+                              <ArrowDownLeft
+                                size={21}
+                                strokeWidth={2.2}
+                              />
+                            ) : (
+                              <ArrowUpRight
+                                size={21}
+                                strokeWidth={2.2}
+                              />
+                            )}
+                          </div>
+
+                          <div>
+                            <span
+                              className={`transaction-type-badge ${
+                                isIncome
+                                  ? 'income-badge'
+                                  : 'expense-badge'
+                              }`}
+                            >
+                              {isIncome
+                                ? t(
+                                    'transactions.income'
+                                  )
+                                : t(
+                                    'transactions.expense'
+                                  )}
+                            </span>
+
+                            <h3 className="transaction-card-title">
+                              {transaction.title}
+                            </h3>
+                          </div>
+
+                        </div>
+
+                        <div className="transaction-card-amount">
+
+                          <span>
+                            {isIncome
+                              ? '+'
+                              : '-'}
+                          </span>
+
+                          {formatAmount(
+                            transaction.paid_amount,
+                            currency
+                          )}
+
+                        </div>
+
+                      </div>
+
+                      {/* Details */}
+
+                      <div className="transaction-card-details">
+
+                        <div className="transaction-detail">
+
+                          <Tag size={15} />
+
+                          <div>
+                            <span>
+                              {t(
+                                'transactions.category'
+                              )}
+                            </span>
+
+                            <strong>
+                              {transaction
+                                .categories
+                                ?.name || '-'}
+                            </strong>
+                          </div>
+
+                        </div>
+
+                        <div className="transaction-detail">
+
+                          <Wallet size={15} />
+
+                          <div>
+                            <span>
+                              {t(
+                                'transactions.account'
+                              )}
+                            </span>
+
+                            <strong>
+                              {transaction
+                                .accounts
+                                ?.name || '-'}
+                            </strong>
+                          </div>
+
+                        </div>
+
+                        <div className="transaction-detail">
+
+                          <CalendarDays
+                            size={15}
+                          />
+
+                          <div>
+                            <span>
+                              {t(
+                                'transactions.dateLabel'
+                              )}
+                            </span>
+
+                            <strong>
+                              {formatDate(
+                                transaction.transaction_date
+                              )}
+                            </strong>
+                          </div>
+
+                        </div>
+
+                      </div>
+
+                      {/* Money Summary */}
+
+                      <div className="transaction-money-summary">
+
+                        <div>
+                          <span>
+                            {t(
+                              'transactions.total'
+                            )}
+                          </span>
+
+                          <strong>
+                            {formatAmount(
+                              transaction.total_amount,
+                              currency
+                            )}
+                          </strong>
+                        </div>
+
+                        <div>
+                          <span>
+                            {t(
+                              'transactions.paid'
+                            )}
+                          </span>
+
+                          <strong>
+                            {formatAmount(
+                              transaction.paid_amount,
+                              currency
+                            )}
+                          </strong>
+                        </div>
+
+                        <div
+                          className={
+                            outstandingAmount >
+                            0
+                              ? 'remaining-money'
+                              : 'fully-paid'
+                          }
+                        >
+                          <span>
+                            {t(
+                              'transactions.outstanding'
+                            )}
+                          </span>
+
+                          <strong>
+                            {formatAmount(
+                              outstandingAmount,
+                              currency
+                            )}
+                          </strong>
+                        </div>
+
+                      </div>
+
+                      {/* Party */}
+
+                      {transaction.party_name && (
+                        <div className="transaction-party">
+
+                          <UserRound
+                            size={15}
+                          />
+
+                          <span>
+                            {transaction.type ===
+                            'income'
+                              ? t(
+                                  'transactions.owesYou'
+                                )
+                              : t(
+                                  'transactions.youOwe'
+                                )}
+                          </span>
+
+                          <strong>
+                            {transaction.party_name}
+                          </strong>
+
+                        </div>
+                      )}
+
+                      {/* Notes */}
+
+                      {transaction.notes && (
+                        <div className="transaction-notes">
+
+                          <FileText
+                            size={15}
+                          />
+
+                          <span>
+                            {transaction.notes}
+                          </span>
+
+                        </div>
+                      )}
+
+                      {/* Actions */}
+
+                      <div className="transaction-card-actions">
+
+                        <button
+                          type="button"
+                          className="transaction-action-button transaction-edit-button"
+                          onClick={() =>
+                            handleEditClick(
+                              transaction
+                            )
+                          }
+                          disabled={
+                            deletingId ===
+                            transaction.id
+                          }
+                        >
+                          <Pencil
+                            size={15}
+                          />
+
+                          <span>
+                            {t(
+                              'transactions.edit'
+                            )}
+                          </span>
+                        </button>
+
+                        <button
+                          type="button"
+                          className="transaction-action-button transaction-delete-button"
+                          onClick={() =>
+                            handleDelete(
+                              transaction.id
+                            )
+                          }
+                          disabled={
+                            deletingId ===
+                            transaction.id
+                          }
+                        >
+                          <Trash2
+                            size={15}
+                          />
+
+                          <span>
+                            {deletingId ===
+                            transaction.id
+                              ? t(
+                                  'transactions.deleting'
+                                )
+                              : t(
+                                  'transactions.delete'
+                                )}
+                          </span>
+                        </button>
+
+                      </div>
+
+                      {/* Edit Form */}
+
+                      {editingTransaction?.id ===
+                        transaction.id && (
+
+                        <div className="transaction-edit-form">
+
+                          <div className="transaction-edit-header">
+
+                            <div>
+                              <h3>
+                                {t(
+                                  'transactions.editTransaction'
+                                )}
+                              </h3>
+                            </div>
+
+                            <button
+                              type="button"
+                              className="transaction-edit-close"
+                              onClick={
+                                handleCancelEdit
+                              }
+                            >
+                              <X size={17} />
+                            </button>
+
+                          </div>
+
+                          <form
+                            onSubmit={
+                              handleEditSubmit
+                            }
+                          >
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.type'
+                                )}
+                              </label>
+
+                              <select
+                                value={
+                                  editType
+                                }
+                                onChange={(e) =>
+                                  handleEditTypeChange(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                              >
+                                <option value="income">
+                                  {t(
+                                    'transactions.income'
+                                  )}
+                                </option>
+
+                                <option value="expense">
+                                  {t(
+                                    'transactions.expense'
+                                  )}
+                                </option>
+                              </select>
+
+                            </div>
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.titleLabel'
+                                )}
+                              </label>
+
+                              <input
+                                type="text"
+                                value={
+                                  editTitle
+                                }
+                                onChange={(e) =>
+                                  setEditTitle(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                              />
+
+                            </div>
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.category'
+                                )}
+                              </label>
+
+                              <select
+                                value={
+                                  editCategoryId
+                                }
+                                onChange={(e) =>
+                                  setEditCategoryId(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                                disabled={
+                                  editCategoriesLoading
+                                }
+                              >
+                                <option value="">
+                                  {editCategoriesLoading
+                                    ? t(
+                                        'transactions.loadingCategories'
+                                      )
+                                    : t(
+                                        'transactions.selectCategory'
+                                      )}
+                                </option>
+
+                                {editCategories.map(
+                                  (
+                                    category
+                                  ) => (
+                                    <option
+                                      key={
+                                        category.id
+                                      }
+                                      value={
+                                        category.id
+                                      }
+                                    >
+                                      {
+                                        category.name
+                                      }
+                                    </option>
+                                  )
+                                )}
+                              </select>
+
+                            </div>
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {editType ===
+                                'income'
+                                  ? t(
+                                      'transactions.paidIntoAccount'
+                                    )
+                                  : t(
+                                      'transactions.paidFromAccount'
+                                    )}
+                              </label>
+
+                              <select
+                                value={
+                                  editAccountId
+                                }
+                                onChange={(e) =>
+                                  setEditAccountId(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                                disabled={
+                                  accountsLoading
+                                }
+                              >
+                                <option value="">
+                                  {accountsLoading
+                                    ? t(
+                                        'transactions.loadingAccounts'
+                                      )
+                                    : t(
+                                        'transactions.selectAccount'
+                                      )}
+                                </option>
+
+                                {accounts.map(
+                                  (
+                                    account
+                                  ) => (
+                                    <option
+                                      key={
+                                        account.id
+                                      }
+                                      value={
+                                        account.id
+                                      }
+                                    >
+                                      {
+                                        account.name
+                                      } (
+                                      {
+                                        account.currency
+                                      }
+                                      )
+                                    </option>
+                                  )
+                                )}
+                              </select>
+
+                            </div>
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.totalAmount'
+                                )}
+                              </label>
+
+                              <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value={
+                                  editTotalAmount
+                                }
+                                onChange={(e) =>
+                                  setEditTotalAmount(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                              />
+
+                            </div>
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.paidAmount'
+                                )}
+                              </label>
+
+                              <input
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                value={
+                                  editPaidAmount
+                                }
+                                onChange={(e) =>
+                                  setEditPaidAmount(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                              />
+
+                            </div>
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.outstanding'
+                                )}
+                              </label>
+
+                              <div className="transaction-outstanding-input">
+                                {editOutstanding >=
+                                0
+                                  ? editOutstanding.toFixed(
+                                      2
+                                    )
+                                  : '0.00'}
+                              </div>
+
+                            </div>
+
+                            {editOutstanding >
+                              0 && (
+                              <div className="transaction-form-field">
+
+                                <label>
+                                  {editType ===
+                                  'income'
+                                    ? t(
+                                        'transactions.whoOwesYou'
+                                      )
+                                    : t(
+                                        'transactions.whoDoYouOwe'
+                                      )}
+                                </label>
+
+                                <input
+                                  type="text"
+                                  value={
+                                    editPartyName
+                                  }
+                                  onChange={(
+                                    e
+                                  ) =>
+                                    setEditPartyName(
+                                      e.target
+                                        .value
+                                    )
+                                  }
+                                  placeholder={
+                                    editType ===
+                                    'income'
+                                      ? t(
+                                          'transactions.owedYouPlaceholder'
+                                        )
+                                      : t(
+                                          'transactions.owePlaceholder'
+                                        )
+                                  }
+                                />
+
+                              </div>
+                            )}
+
+                            <div className="transaction-form-field">
+
+                              <label>
+                                {t(
+                                  'transactions.date'
+                                )}
+                              </label>
+
+                              <input
+                                type="date"
+                                value={
+                                  editTransactionDate
+                                }
+                                onChange={(e) =>
+                                  setEditTransactionDate(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                              />
+
+                            </div>
+
+                            <div className="transaction-form-field transaction-notes-field">
+
+                              <label>
+                                {t(
+                                  'transactions.notes'
+                                )}
+                              </label>
+
+                              <textarea
+                                value={
+                                  editNotes
+                                }
+                                onChange={(e) =>
+                                  setEditNotes(
+                                    e.target
+                                      .value
+                                  )
+                                }
+                                rows="3"
+                              />
+
+                            </div>
+
+                            <div className="transaction-edit-actions">
+
+                              <button
+                                type="submit"
+                                className="primary-button"
+                                disabled={
+                                  editSaving
+                                }
+                              >
+                                <Save
+                                  size={15}
+                                />
+
+                                <span>
+                                  {editSaving
+                                    ? t(
+                                        'transactions.saving'
+                                      )
+                                    : t(
+                                        'transactions.saveChanges'
+                                      )}
+                                </span>
+                              </button>
+
+                              <button
+                                type="button"
+                                className="secondary-button"
+                                onClick={
+                                  handleCancelEdit
+                                }
+                              >
+                                {t(
+                                  'transactions.cancel'
+                                )}
+                              </button>
+
+                            </div>
+
+                            {editError && (
+                              <p className="transaction-form-error">
+                                {editError}
+                              </p>
+                            )}
+
+                          </form>
+
+                        </div>
+                      )}
+
+                    </article>
+                  )
+                }
+              )}
+
+            </div>
+          )}
+
+      </section>
 
     </div>
   )

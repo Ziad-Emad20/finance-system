@@ -1,9 +1,12 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useCategories } from '../hooks/useCategories'
 
 import './Categories.css'
 
 function Categories() {
+  const { t } = useTranslation()
+
   const {
     categories,
     loading,
@@ -38,7 +41,9 @@ function Categories() {
     setSuccess('')
 
     if (!name.trim()) {
-      setFormError('Please enter a category name.')
+      setFormError(
+        t('categories.pleaseEnterName')
+      )
       return
     }
 
@@ -61,7 +66,10 @@ function Categories() {
     setName('')
     setType('income')
 
-    setSuccess('Category created successfully.')
+    setSuccess(
+      t('categories.categoryCreated')
+    )
+
     setSaving(false)
 
     console.log('Created category:', category)
@@ -70,10 +78,8 @@ function Categories() {
   // Start editing
   const handleEditClick = (category) => {
     setEditingCategory(category)
-
     setEditName(category.name)
     setEditType(category.type)
-
     setEditError('')
     setSuccess('')
     setDeleteError('')
@@ -93,7 +99,9 @@ function Categories() {
     setSuccess('')
 
     if (!editName.trim()) {
-      setEditError('Please enter a category name.')
+      setEditError(
+        t('categories.pleaseEnterName')
+      )
       return
     }
 
@@ -117,13 +125,18 @@ function Categories() {
 
     setEditingCategory(null)
     setEditSaving(false)
-    setSuccess('Category updated successfully.')
+
+    setSuccess(
+      t('categories.categoryUpdated')
+    )
   }
 
   // Delete category
   const handleDeleteClick = async (category) => {
     const confirmed = window.confirm(
-      `Are you sure you want to delete "${category.name}"?`
+      t('categories.confirmDelete', {
+        name: category.name,
+      })
     )
 
     if (!confirmed) {
@@ -149,7 +162,10 @@ function Categories() {
     }
 
     setDeletingCategoryId(null)
-    setSuccess('Category deleted successfully.')
+
+    setSuccess(
+      t('categories.categoryDeleted')
+    )
   }
 
   return (
@@ -157,38 +173,59 @@ function Categories() {
 
       <div className="categories-header">
         <div>
-          <h1>Categories</h1>
-          <p>Manage your income and expense categories.</p>
+          <h1>{t('categories.title')}</h1>
+
+          <p>
+            {t('categories.subtitle')}
+          </p>
         </div>
       </div>
 
       {/* Add Category */}
+
       <div className="category-form-section">
 
-        <h2>Add Category</h2>
+        <h2>
+          {t('categories.addCategory')}
+        </h2>
 
         <form onSubmit={handleSubmit}>
 
           <div>
-            <label>Category Name</label>
+            <label>
+              {t('categories.categoryName')}
+            </label>
 
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Freelancing"
+              onChange={(e) =>
+                setName(e.target.value)
+              }
+              placeholder={t(
+                'categories.namePlaceholder'
+              )}
             />
           </div>
 
           <div>
-            <label>Category Type</label>
+            <label>
+              {t('categories.categoryType')}
+            </label>
 
             <select
               value={type}
-              onChange={(e) => setType(e.target.value)}
+              onChange={(e) =>
+                setType(e.target.value)
+              }
             >
-              <option value="income">Income</option>
-              <option value="expense">Expense</option>
+              <option value="income">
+                {t('categories.income')}
+              </option>
+
+              <option value="expense">
+                {t('categories.expense')}
+              </option>
             </select>
           </div>
 
@@ -197,7 +234,9 @@ function Categories() {
             className="primary-button"
             disabled={saving}
           >
-            {saving ? 'Creating...' : 'Create Category'}
+            {saving
+              ? t('categories.creating')
+              : t('categories.createCategory')}
           </button>
 
           {formError && (
@@ -213,119 +252,155 @@ function Categories() {
       </div>
 
       {/* Categories List */}
+
       <div className="categories-list-section">
 
-        <h2>Your Categories</h2>
+        <h2>
+          {t('categories.yourCategories')}
+        </h2>
 
         {loading && (
-          <p>Loading categories...</p>
+          <p>
+            {t('categories.loading')}
+          </p>
         )}
 
         {!loading && error && (
           <p>{error.message}</p>
         )}
 
-        {!loading && !error && categories.length === 0 && (
-          <p>No categories yet.</p>
-        )}
+        {!loading &&
+          !error &&
+          categories.length === 0 && (
+            <p>
+              {t('categories.noCategories')}
+            </p>
+          )}
 
-        {!loading && !error && categories.length > 0 && (
-          <div>
+        {!loading &&
+          !error &&
+          categories.length > 0 && (
+            <div>
 
-            {categories.map((category) => (
-              <div key={category.id}>
+              {categories.map((category) => (
+                <div key={category.id}>
 
-                <h3>{category.name}</h3>
+                  <h3>{category.name}</h3>
 
-                <p>
-                  Type: {category.type}
-                </p>
+                  <p>
+                    {t('categories.type')}:{' '}
+                    {category.type === 'income'
+                      ? t('categories.income')
+                      : t('categories.expense')}
+                  </p>
 
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => handleEditClick(category)}
-                >
-                  Edit
-                </button>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() =>
+                      handleEditClick(category)
+                    }
+                  >
+                    {t('categories.edit')}
+                  </button>
 
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => handleDeleteClick(category)}
-                  disabled={deletingCategoryId === category.id}
-                >
-                  {deletingCategoryId === category.id
-                    ? 'Deleting...'
-                    : 'Delete'}
-                </button>
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    onClick={() =>
+                      handleDeleteClick(category)
+                    }
+                    disabled={
+                      deletingCategoryId === category.id
+                    }
+                  >
+                    {deletingCategoryId === category.id
+                      ? t('categories.deleting')
+                      : t('categories.delete')}
+                  </button>
 
-                {/* Edit Category */}
-                {editingCategory?.id === category.id && (
-                  <div className="category-edit-form">
+                  {/* Edit Category */}
 
-                    <h3>Edit Category</h3>
+                  {editingCategory?.id === category.id && (
+                    <div className="category-edit-form">
 
-                    <form onSubmit={handleEditSubmit}>
+                      <h3>
+                        {t('categories.editCategory')}
+                      </h3>
 
-                      <div>
-                        <label>Category Name</label>
+                      <form onSubmit={handleEditSubmit}>
 
-                        <input
-                          type="text"
-                          value={editName}
-                          onChange={(e) =>
-                            setEditName(e.target.value)
-                          }
-                        />
-                      </div>
+                        <div>
+                          <label>
+                            {t('categories.categoryName')}
+                          </label>
 
-                      <div>
-                        <label>Category Type</label>
+                          <input
+                            type="text"
+                            value={editName}
+                            onChange={(e) =>
+                              setEditName(
+                                e.target.value
+                              )
+                            }
+                          />
+                        </div>
 
-                        <select
-                          value={editType}
-                          onChange={(e) =>
-                            setEditType(e.target.value)
-                          }
+                        <div>
+                          <label>
+                            {t('categories.categoryType')}
+                          </label>
+
+                          <select
+                            value={editType}
+                            onChange={(e) =>
+                              setEditType(
+                                e.target.value
+                              )
+                            }
+                          >
+                            <option value="income">
+                              {t('categories.income')}
+                            </option>
+
+                            <option value="expense">
+                              {t('categories.expense')}
+                            </option>
+                          </select>
+                        </div>
+
+                        <button
+                          type="submit"
+                          className="primary-button"
+                          disabled={editSaving}
                         >
-                          <option value="income">Income</option>
-                          <option value="expense">Expense</option>
-                        </select>
-                      </div>
+                          {editSaving
+                            ? t('categories.saving')
+                            : t('categories.saveChanges')}
+                        </button>
 
-                      <button
-                        type="submit"
-                        className="primary-button"
-                        disabled={editSaving}
-                      >
-                        {editSaving
-                          ? 'Saving...'
-                          : 'Save Changes'}
-                      </button>
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={handleCancelEdit}
+                        >
+                          {t('categories.cancel')}
+                        </button>
 
-                      <button
-                        type="button"
-                        className="secondary-button"
-                        onClick={handleCancelEdit}
-                      >
-                        Cancel
-                      </button>
+                        {editError && (
+                          <p>{editError}</p>
+                        )}
 
-                      {editError && (
-                        <p>{editError}</p>
-                      )}
+                      </form>
 
-                    </form>
+                    </div>
+                  )}
 
-                  </div>
-                )}
+                </div>
+              ))}
 
-              </div>
-            ))}
-
-          </div>
-        )}
+            </div>
+          )}
 
         {deleteError && (
           <p>{deleteError}</p>

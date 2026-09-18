@@ -1,12 +1,35 @@
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
+import {
+  Wallet,
+  TrendingUp,
+  TrendingDown,
+  BarChart3,
+  HandCoins,
+  CreditCard,
+  Plus,
+} from 'lucide-react'
 
 import { useAccounts } from '../hooks/useAccounts'
 import { useTransactions } from '../hooks/useTransactions'
 
+import {
+  getTotalIncome,
+  getTotalExpenses,
+  getTotalBalance,
+  getReceivables,
+  getPayables,
+  getAverageMonthlyIncome,
+  getMonthlyIncome,
+  getMonthlyIncomeVsExpenses,
+} from '../utils/finance'
+
 import './Dashboard.css'
 
 function Dashboard() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
 
   const {
     accounts,
@@ -31,69 +54,75 @@ function Dashboard() {
     accountsError || transactionsError
 
   // -----------------------------
-  // Total Balance
+  // Financial Calculations
   // -----------------------------
 
-  const totalBalance = accounts.reduce(
-    (total, account) =>
-      total + Number(account.balance || 0),
-    0
-  )
+  const totalBalance =
+    getTotalBalance(accounts)
+
+  const totalIncome =
+    getTotalIncome(transactions)
+
+  const totalExpenses =
+    getTotalExpenses(transactions)
+
+  const receivables =
+    getReceivables(transactions)
+
+  const payables =
+    getPayables(transactions)
+
+  const averageMonthlyIncome =
+    getAverageMonthlyIncome(transactions)
+
+  const monthlyIncome =
+    getMonthlyIncome(transactions)
+
+  const monthlyIncomeVsExpenses =
+    getMonthlyIncomeVsExpenses(transactions)
 
   // -----------------------------
-  // Total Income
+  // Monthly Income Chart
   // -----------------------------
 
-  const totalIncome = transactions
-    .filter(
-      (transaction) => transaction.type === 'income'
-    )
-    .reduce(
-      (total, transaction) =>
-        total + Number(transaction.paid_amount || 0),
-      0
-    )
+  const maxMonthlyIncome =
+    monthlyIncome.length > 0
+      ? Math.max(
+          ...monthlyIncome.map(
+            (item) => item.amount
+          )
+        )
+      : 0
 
   // -----------------------------
-  // Total Expenses
+  // Income vs Expenses Chart
   // -----------------------------
 
-  const totalExpenses = transactions
-    .filter(
-      (transaction) => transaction.type === 'expense'
-    )
-    .reduce(
-      (total, transaction) =>
-        total + Number(transaction.paid_amount || 0),
-      0
-    )
-
-  // -----------------------------
-  // Total Debts
-  // -----------------------------
-
-  const totalDebts = transactions.reduce(
-    (total, transaction) => {
-      const outstanding =
-        Number(transaction.total_amount || 0) -
-        Number(transaction.paid_amount || 0)
-
-      return outstanding > 0
-        ? total + outstanding
-        : total
-    },
-    0
-  )
+  const maxIncomeVsExpenses =
+    monthlyIncomeVsExpenses.length > 0
+      ? Math.max(
+          ...monthlyIncomeVsExpenses.map(
+            (item) =>
+              Math.max(
+                item.income,
+                item.expenses
+              )
+          )
+        )
+      : 0
 
   // -----------------------------
   // Format Amount
   // -----------------------------
 
   const formatAmount = (amount) => {
-    return `${amount.toLocaleString('en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    })} EGP`
+    return `${amount.toLocaleString(
+      'en-US',
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }
+    )} EGP`
   }
 
   // -----------------------------
@@ -103,11 +132,38 @@ function Dashboard() {
   const formatDate = (date) => {
     if (!date) return '-'
 
-    return new Date(`${date}T00:00:00`).toLocaleDateString(
-      'en-US',
+    return new Date(
+      `${date}T00:00:00`
+    ).toLocaleDateString(
+      i18n.language === 'ar'
+        ? 'ar-EG'
+        : 'en-US',
       {
         month: 'short',
         day: 'numeric',
+        year: 'numeric',
+      }
+    )
+  }
+
+  // -----------------------------
+  // Format Month
+  // -----------------------------
+
+  const formatMonth = (month) => {
+    const [year, monthNumber] =
+      month.split('-')
+
+    return new Date(
+      Number(year),
+      Number(monthNumber) - 1,
+      1
+    ).toLocaleDateString(
+      i18n.language === 'ar'
+        ? 'ar-EG'
+        : 'en-US',
+      {
+        month: 'short',
         year: 'numeric',
       }
     )
@@ -128,6 +184,7 @@ function Dashboard() {
       <div className="dashboard-header">
 
         <div>
+
           <h1>
             {t('dashboard.title')}
           </h1>
@@ -135,10 +192,20 @@ function Dashboard() {
           <p>
             {t('dashboard.subtitle')}
           </p>
+
         </div>
 
-        <button className="primary-button">
-          + {t('dashboard.addTransaction')}
+        <button
+          className="primary-button dashboard-add-button"
+          onClick={() =>
+            navigate('/transactions')
+          }
+        >
+          <Plus size={16} strokeWidth={2.5} />
+
+          <span>
+            {t('dashboard.addTransaction')}
+          </span>
         </button>
 
       </div>
@@ -149,15 +216,23 @@ function Dashboard() {
 
         {/* Total Balance */}
 
-        <div className="summary-card">
+        <div className="summary-card balance-card">
 
-          <span className="summary-card-label">
-            {t('dashboard.totalBalance')}
-          </span>
+          <div className="summary-card-top">
+
+            <div className="summary-card-icon balance-icon">
+              <Wallet size={19} strokeWidth={2} />
+            </div>
+
+            <span className="summary-card-label">
+              {t('dashboard.totalBalance')}
+            </span>
+
+          </div>
 
           <h2>
             {loading
-              ? 'Loading...'
+              ? t('dashboard.loading')
               : formatAmount(totalBalance)}
           </h2>
 
@@ -165,15 +240,23 @@ function Dashboard() {
 
         {/* Total Income */}
 
-        <div className="summary-card">
+        <div className="summary-card income-card">
 
-          <span className="summary-card-label">
-            {t('dashboard.totalIncome')}
-          </span>
+          <div className="summary-card-top">
+
+            <div className="summary-card-icon income-icon">
+              <TrendingUp size={19} strokeWidth={2} />
+            </div>
+
+            <span className="summary-card-label">
+              {t('dashboard.totalIncome')}
+            </span>
+
+          </div>
 
           <h2>
             {loading
-              ? 'Loading...'
+              ? t('dashboard.loading')
               : formatAmount(totalIncome)}
           </h2>
 
@@ -181,32 +264,104 @@ function Dashboard() {
 
         {/* Total Expenses */}
 
-        <div className="summary-card">
+        <div className="summary-card expense-card">
 
-          <span className="summary-card-label">
-            {t('dashboard.totalExpenses')}
-          </span>
+          <div className="summary-card-top">
+
+            <div className="summary-card-icon expense-icon">
+              <TrendingDown size={19} strokeWidth={2} />
+            </div>
+
+            <span className="summary-card-label">
+              {t('dashboard.totalExpenses')}
+            </span>
+
+          </div>
 
           <h2>
             {loading
-              ? 'Loading...'
+              ? t('dashboard.loading')
               : formatAmount(totalExpenses)}
           </h2>
 
         </div>
 
-        {/* Total Debts */}
+        {/* Average Monthly Income */}
 
-        <div className="summary-card">
+        <div className="summary-card average-card">
 
-          <span className="summary-card-label">
-            {t('dashboard.totalDebts')}
-          </span>
+          <div className="summary-card-top">
+
+            <div className="summary-card-icon average-icon">
+              <BarChart3 size={19} strokeWidth={2} />
+            </div>
+
+            <span className="summary-card-label">
+              {t(
+                'dashboard.averageMonthlyIncome'
+              )}
+            </span>
+
+          </div>
 
           <h2>
             {loading
-              ? 'Loading...'
-              : formatAmount(totalDebts)}
+              ? t('dashboard.loading')
+              : formatAmount(
+                  averageMonthlyIncome
+                )}
+          </h2>
+
+        </div>
+
+        {/* Money Owed To You */}
+
+        <div className="summary-card receivable-card">
+
+          <div className="summary-card-top">
+
+            <div className="summary-card-icon receivable-icon">
+              <HandCoins size={19} strokeWidth={2} />
+            </div>
+
+            <span className="summary-card-label">
+              {t(
+                'dashboard.moneyOwedToYou'
+              )}
+            </span>
+
+          </div>
+
+          <h2>
+            {loading
+              ? t('dashboard.loading')
+              : formatAmount(receivables)}
+          </h2>
+
+        </div>
+
+        {/* Money You Owe */}
+
+        <div className="summary-card payable-card">
+
+          <div className="summary-card-top">
+
+            <div className="summary-card-icon payable-icon">
+              <CreditCard size={19} strokeWidth={2} />
+            </div>
+
+            <span className="summary-card-label">
+              {t(
+                'dashboard.moneyYouOwe'
+              )}
+            </span>
+
+          </div>
+
+          <h2>
+            {loading
+              ? t('dashboard.loading')
+              : formatAmount(payables)}
           </h2>
 
         </div>
@@ -221,6 +376,228 @@ function Dashboard() {
         </p>
       )}
 
+      {/* Monthly Income */}
+
+      <div className="monthly-income-section">
+
+        <div className="section-header">
+
+          <div>
+
+            <h2>
+              {t(
+                'dashboard.monthlyIncome'
+              )}
+            </h2>
+
+            <p>
+              {t(
+                'dashboard.monthlyIncomeDescription'
+              )}
+            </p>
+
+          </div>
+
+        </div>
+
+        {loading ? (
+
+          <p>
+            {t(
+              'dashboard.loadingMonthlyIncome'
+            )}
+          </p>
+
+        ) : monthlyIncome.length === 0 ? (
+
+          <p>
+            {t(
+              'dashboard.noIncomeData'
+            )}
+          </p>
+
+        ) : (
+
+          <div className="income-chart">
+
+            <div className="income-chart-bars">
+
+              {monthlyIncome.map(
+                ({ month, amount }) => {
+
+                  const height =
+                    maxMonthlyIncome > 0
+                      ? (amount /
+                          maxMonthlyIncome) *
+                        100
+                      : 0
+
+                  return (
+
+                    <div
+                      key={month}
+                      className="income-chart-column"
+                    >
+
+                      <div className="income-chart-value">
+                        {formatAmount(amount)}
+                      </div>
+
+                      <div className="income-chart-bar-wrapper">
+
+                        <div
+                          className="income-chart-bar"
+                          style={{
+                            height: `${height}%`,
+                          }}
+                        />
+
+                      </div>
+
+                      <div className="income-chart-label">
+                        {formatMonth(month)}
+                      </div>
+
+                    </div>
+
+                  )
+                }
+              )}
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
+
+      {/* Income vs Expenses */}
+
+      <div className="income-expenses-section">
+
+        <div className="section-header">
+
+          <div>
+
+            <h2>
+              {t(
+                'dashboard.incomeVsExpenses'
+              )}
+            </h2>
+
+            <p>
+              {t(
+                'dashboard.incomeVsExpensesDescription'
+              )}
+            </p>
+
+          </div>
+
+        </div>
+
+        {loading ? (
+
+          <p>
+            {t(
+              'dashboard.loadingIncomeExpenses'
+            )}
+          </p>
+
+        ) : monthlyIncomeVsExpenses.length === 0 ? (
+
+          <p>
+            {t(
+              'dashboard.noIncomeExpenseData'
+            )}
+          </p>
+
+        ) : (
+
+          <div className="income-expenses-chart">
+
+            {monthlyIncomeVsExpenses.map(
+              ({
+                month,
+                income,
+                expenses,
+              }) => {
+
+                const incomeHeight =
+                  maxIncomeVsExpenses > 0
+                    ? (income /
+                        maxIncomeVsExpenses) *
+                      100
+                    : 0
+
+                const expensesHeight =
+                  maxIncomeVsExpenses > 0
+                    ? (expenses /
+                        maxIncomeVsExpenses) *
+                      100
+                    : 0
+
+                return (
+
+                  <div
+                    key={month}
+                    className="income-expenses-column"
+                  >
+
+                    <div className="income-expenses-values">
+
+                      <span>
+                        +{formatAmount(income)}
+                      </span>
+
+                      <span>
+                        -{formatAmount(expenses)}
+                      </span>
+
+                    </div>
+
+                    <div className="income-expenses-bars">
+
+                      <div className="income-bar-wrapper">
+
+                        <div
+                          className="income-bar"
+                          style={{
+                            height: `${incomeHeight}%`,
+                          }}
+                        />
+
+                      </div>
+
+                      <div className="expense-bar-wrapper">
+
+                        <div
+                          className="expense-bar"
+                          style={{
+                            height: `${expensesHeight}%`,
+                          }}
+                        />
+
+                      </div>
+
+                    </div>
+
+                    <div className="income-expenses-label">
+                      {formatMonth(month)}
+                    </div>
+
+                  </div>
+
+                )
+              }
+            )}
+
+          </div>
+
+        )}
+
+      </div>
+
       {/* Recent Transactions */}
 
       <div className="recent-transactions">
@@ -228,16 +605,27 @@ function Dashboard() {
         <div className="section-header">
 
           <div>
+
             <h2>
-              {t('dashboard.recentTransactions')}
+              {t(
+                'dashboard.recentTransactions'
+              )}
             </h2>
 
             <p>
-              {t('dashboard.latestFinancialActivity')}
+              {t(
+                'dashboard.latestFinancialActivity'
+              )}
             </p>
+
           </div>
 
-          <button className="secondary-button">
+          <button
+            className="secondary-button"
+            onClick={() =>
+              navigate('/transactions')
+            }
+          >
             {t('dashboard.viewAll')}
           </button>
 
@@ -246,14 +634,21 @@ function Dashboard() {
         <div className="transactions-table-wrapper">
 
           {loading ? (
+
             <p>
-              Loading transactions...
+              {t('dashboard.loading')}
             </p>
+
           ) : recentTransactions.length === 0 ? (
+
             <p>
-              No transactions yet.
+              {t(
+                'dashboard.noTransactions'
+              )}
             </p>
+
           ) : (
+
             <table className="transactions-table">
 
               <thead>
@@ -261,19 +656,27 @@ function Dashboard() {
                 <tr>
 
                   <th>
-                    {t('dashboard.description')}
+                    {t(
+                      'dashboard.description'
+                    )}
                   </th>
 
                   <th>
-                    {t('dashboard.category')}
+                    {t(
+                      'dashboard.category'
+                    )}
                   </th>
 
                   <th>
-                    {t('dashboard.date')}
+                    {t(
+                      'dashboard.date'
+                    )}
                   </th>
 
                   <th>
-                    {t('dashboard.amount')}
+                    {t(
+                      'dashboard.amount'
+                    )}
                   </th>
 
                 </tr>
@@ -286,14 +689,17 @@ function Dashboard() {
                   (transaction) => {
 
                     const isIncome =
-                      transaction.type === 'income'
+                      transaction.type ===
+                      'income'
 
                     const amount =
                       Number(
-                        transaction.paid_amount || 0
+                        transaction.paid_amount ||
+                        0
                       )
 
                     return (
+
                       <tr
                         key={transaction.id}
                       >
@@ -320,11 +726,17 @@ function Dashboard() {
                               : 'expense'
                           }
                         >
-                          {isIncome ? '+' : '-'}
+
+                          {isIncome
+                            ? '+'
+                            : '-'}
+
                           {formatAmount(amount)}
+
                         </td>
 
                       </tr>
+
                     )
                   }
                 )}
@@ -332,6 +744,7 @@ function Dashboard() {
               </tbody>
 
             </table>
+
           )}
 
         </div>

@@ -1,72 +1,481 @@
+/* =========================================================
+   Dashboard Layout
+========================================================= */
+
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
+  width: 100%;
   background-color: var(--background);
+  overflow-x: hidden;
 }
+
+/* =========================================================
+   Sidebar
+========================================================= */
 
 .sidebar {
   width: 250px;
   min-height: 100vh;
-  background-color: var(--surface);
-  border-right: 1px solid var(--border);
+  box-sizing: border-box;
+
+  background: #111827;
+  border-right: 1px solid #1f2937;
+
   flex-shrink: 0;
-  padding: 24px 16px;
+
+  padding: 24px 14px;
+
+  position: relative;
+  z-index: 100;
+
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+/* =========================================================
+   Sidebar Header
+========================================================= */
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 34px;
+  padding: 0 4px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-width: 0;
+}
+
+.sidebar-brand-icon {
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #2563eb;
+  color: #ffffff;
 }
 
 .sidebar-logo {
-  font-size: 20px;
+  color: #ffffff;
+
+  font-size: 18px;
+  line-height: 1.2;
   font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 32px;
+
+  white-space: nowrap;
 }
+
+.sidebar-close-button {
+  display: none;
+
+  width: 36px;
+  height: 36px;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  background: transparent;
+  color: #9ca3af;
+
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar-close-button:hover {
+  background-color: #1f2937;
+  color: #ffffff;
+}
+
+/* =========================================================
+   Navigation
+========================================================= */
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .sidebar-nav a {
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+
+  min-height: 44px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+  gap: 12px;
+
+  border-radius: 10px;
+
+  color: #9ca3af;
+
   font-size: 14px;
   font-weight: 500;
-  transition: 0.2s ease;
+
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar-nav a svg {
+  flex-shrink: 0;
+  color: #9ca3af;
+
+  transition: color 0.2s ease;
 }
 
 .sidebar-nav a:hover {
-  background-color: var(--background);
-  color: var(--primary);
+  background: #1f2937;
+  color: #ffffff;
 }
+
+.sidebar-nav a:hover svg {
+  color: #ffffff;
+}
+
+.sidebar-nav a.active {
+  background: #2563eb;
+  color: #ffffff;
+
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.sidebar-nav a.active svg {
+  color: #ffffff;
+}
+
+/* =========================================================
+   Main Content
+========================================================= */
 
 .main-content {
   flex: 1;
   min-width: 0;
-  padding: 24px;
+
+  box-sizing: border-box;
+
+  padding: 28px 24px;
 }
 
-.sidebar-nav a.active {
-  background-color: var(--primary);
-  color: white;
+/* =========================================================
+   Mobile Header
+========================================================= */
+
+.mobile-header {
+  display: none;
 }
+
+/* =========================================================
+   Overlay
+========================================================= */
+
+.sidebar-overlay {
+  display: none;
+}
+
+/* =========================================================
+   Tablet
+========================================================= */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 220px;
+  }
+
+  .main-content {
+    padding: 24px 20px;
+  }
+}
+
+/* =========================================================
+   Mobile
+========================================================= */
 
 @media (max-width: 768px) {
+
+  .dashboard-layout {
+    display: block;
+    min-height: 100vh;
+    width: 100%;
+
+    overflow-x: hidden;
+  }
+
+  /* -------------------------
+     Mobile Topbar
+  ------------------------- */
+
+  .mobile-header {
+    height: 58px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 16px;
+
+    /* نفس لون الـ Sidebar */
+    background: #111827;
+
+    border-bottom: 1px solid #1f2937;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 90;
+  }
+
+  .mobile-menu-button {
+    width: 38px;
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    transition:
+      background-color 0.2s ease;
+  }
+
+  .mobile-menu-button:hover {
+    background: #1f2937;
+  }
+
+  .mobile-header-title {
+    margin-left: 10px;
+
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    white-space: nowrap;
+  }
+
+  /* -------------------------
+     Sidebar Drawer
+  ------------------------- */
+
   .sidebar {
-    width: 200px;
-    padding: 20px 12px;
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: min(280px, 82vw);
+    height: 100vh;
+    min-height: 100vh;
+
+    padding: 22px 16px;
+
+    box-sizing: border-box;
+
+    transform: translateX(-105%);
+
+    box-shadow: none;
+
+    z-index: 110;
+
+    overflow-y: auto;
+
+    transition:
+      transform 0.28s ease,
+      box-shadow 0.28s ease;
+  }
+
+  .sidebar.sidebar-open {
+    transform: translateX(0);
+
+    box-shadow:
+      10px 0 35px rgba(0, 0, 0, 0.25);
+  }
+
+  .sidebar-header {
+    margin-bottom: 28px;
+  }
+
+  .sidebar-logo {
+    font-size: 18px;
+  }
+
+  .sidebar-close-button {
+    display: flex;
+  }
+
+  .sidebar-nav {
+    gap: 6px;
+  }
+
+  .sidebar-nav a {
+    min-height: 46px;
+
+    padding: 0 13px;
+
+    font-size: 14px;
+    gap: 12px;
+  }
+
+  /* -------------------------
+     Overlay
+  ------------------------- */
+
+  .sidebar-overlay {
+    display: block;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(15, 23, 42, 0.45);
+
+    z-index: 105;
+
+    animation: sidebarOverlayIn 0.2s ease;
+  }
+
+  /* -------------------------
+     Main Content
+  ------------------------- */
+
+  .main-content {
+    width: 100%;
+    min-width: 0;
+
+    padding: 18px 16px 28px;
+
+    box-sizing: border-box;
+  }
+}
+
+/* =========================================================
+   Small Mobile
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .mobile-header {
+    height: 56px;
+
+    padding: 0 13px;
+  }
+
+  .mobile-menu-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mobile-header-title {
+    margin-left: 8px;
+    font-size: 15px;
+  }
+
+  .sidebar {
+    width: min(270px, 84vw);
+
+    padding: 20px 14px;
+  }
+
+  .sidebar-brand-icon {
+    width: 32px;
+    height: 32px;
   }
 
   .sidebar-logo {
     font-size: 17px;
   }
 
-  .sidebar-nav a {
-    font-size: 13px;
-    padding: 9px 10px;
+  .main-content {
+    padding: 16px 12px 24px;
+  }
+}
+
+/* =========================================================
+   RTL
+========================================================= */
+
+[dir='rtl'] .sidebar {
+  border-right: none;
+  border-left: 1px solid #1f2937;
+}
+
+[dir='rtl'] .mobile-header-title {
+  margin-left: 0;
+  margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+
+  [dir='rtl'] .sidebar {
+    left: auto;
+    right: 0;
+
+    transform: translateX(105%);
   }
 
-  .main-content {
-    padding: 16px;
+  [dir='rtl'] .sidebar.sidebar-open {
+    transform: translateX(0);
+
+    box-shadow:
+      -10px 0 35px rgba(0, 0, 0, 0.25);
+  }
+
+  [dir='rtl'] .mobile-header-title {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+}
+
+/* =========================================================
+   Animation
+========================================================= */
+
+@keyframes sidebarOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

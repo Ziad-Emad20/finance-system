@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import { useTransactions } from '../hooks/useTransactions'
 
 function Debts() {
+  const { t, i18n } = useTranslation()
+
   const {
     transactions,
     loading,
@@ -49,18 +52,30 @@ function Debts() {
     0
   )
 
-  const formatAmount = (amount, currency = 'EGP') => {
-    return `${amount.toLocaleString('en-US', {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    })} ${currency}`
+  const formatAmount = (
+    amount,
+    currency = 'EGP'
+  ) => {
+    return `${amount.toLocaleString(
+      i18n.language === 'ar'
+        ? 'ar-EG'
+        : 'en-US',
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }
+    )} ${currency}`
   }
 
   const formatDate = (date) => {
     if (!date) return '-'
 
-    return new Date(`${date}T00:00:00`).toLocaleDateString(
-      'en-US',
+    return new Date(
+      `${date}T00:00:00`
+    ).toLocaleDateString(
+      i18n.language === 'ar'
+        ? 'ar-EG'
+        : 'en-US',
       {
         month: 'short',
         day: 'numeric',
@@ -75,21 +90,19 @@ function Debts() {
       {/* Header */}
 
       <div className="debts-header">
-
         <div>
-          <h1>Debts</h1>
+          <h1>{t('debts.title')}</h1>
 
           <p>
-            Track money you owe and money owed to you.
+            {t('debts.subtitle')}
           </p>
         </div>
-
       </div>
 
       {/* Loading */}
 
       {loading && (
-        <p>Loading debts...</p>
+        <p>{t('debts.loading')}</p>
       )}
 
       {/* Error */}
@@ -105,9 +118,8 @@ function Debts() {
           <div className="summary-cards">
 
             <div className="summary-card">
-
               <span className="summary-card-label">
-                Money Owed to You
+                {t('debts.moneyOwedToYou')}
               </span>
 
               <h2>
@@ -115,13 +127,11 @@ function Debts() {
                   totalReceivables
                 )}
               </h2>
-
             </div>
 
             <div className="summary-card">
-
               <span className="summary-card-label">
-                Money You Owe
+                {t('debts.moneyYouOwe')}
               </span>
 
               <h2>
@@ -129,13 +139,11 @@ function Debts() {
                   totalPayables
                 )}
               </h2>
-
             </div>
 
             <div className="summary-card">
-
               <span className="summary-card-label">
-                Total Outstanding
+                {t('debts.totalOutstanding')}
               </span>
 
               <h2>
@@ -144,7 +152,6 @@ function Debts() {
                     totalPayables
                 )}
               </h2>
-
             </div>
 
           </div>
@@ -154,22 +161,22 @@ function Debts() {
           <div className="debts-section">
 
             <div className="section-header">
-
               <div>
+
                 <h2>
-                  Money Owed to You
+                  {t('debts.moneyOwedToYou')}
                 </h2>
 
                 <p>
-                  Income that has not been fully collected.
+                  {t('debts.receivablesDescription')}
                 </p>
-              </div>
 
+              </div>
             </div>
 
             {receivables.length === 0 ? (
               <p>
-                No outstanding receivables.
+                {t('debts.noReceivables')}
               </p>
             ) : (
               <div className="debts-table-wrapper">
@@ -177,16 +184,31 @@ function Debts() {
                 <table className="debts-table">
 
                   <thead>
-
                     <tr>
-                      <th>Person / Company</th>
-                      <th>Transaction</th>
-                      <th>Total</th>
-                      <th>Paid</th>
-                      <th>Remaining</th>
-                      <th>Date</th>
-                    </tr>
+                      <th>
+                        {t('debts.personCompany')}
+                      </th>
 
+                      <th>
+                        {t('debts.transaction')}
+                      </th>
+
+                      <th>
+                        {t('debts.total')}
+                      </th>
+
+                      <th>
+                        {t('debts.paid')}
+                      </th>
+
+                      <th>
+                        {t('debts.remaining')}
+                      </th>
+
+                      <th>
+                        {t('debts.date')}
+                      </th>
+                    </tr>
                   </thead>
 
                   <tbody>
@@ -254,22 +276,22 @@ function Debts() {
           <div className="debts-section">
 
             <div className="section-header">
-
               <div>
+
                 <h2>
-                  Money You Owe
+                  {t('debts.moneyYouOwe')}
                 </h2>
 
                 <p>
-                  Expenses that have not been fully paid.
+                  {t('debts.payablesDescription')}
                 </p>
-              </div>
 
+              </div>
             </div>
 
             {payables.length === 0 ? (
               <p>
-                No outstanding payables.
+                {t('debts.noPayables')}
               </p>
             ) : (
               <div className="debts-table-wrapper">
@@ -277,16 +299,31 @@ function Debts() {
                 <table className="debts-table">
 
                   <thead>
-
                     <tr>
-                      <th>Person / Company</th>
-                      <th>Transaction</th>
-                      <th>Total</th>
-                      <th>Paid</th>
-                      <th>Remaining</th>
-                      <th>Date</th>
-                    </tr>
+                      <th>
+                        {t('debts.personCompany')}
+                      </th>
 
+                      <th>
+                        {t('debts.transaction')}
+                      </th>
+
+                      <th>
+                        {t('debts.total')}
+                      </th>
+
+                      <th>
+                        {t('debts.paid')}
+                      </th>
+
+                      <th>
+                        {t('debts.remaining')}
+                      </th>
+
+                      <th>
+                        {t('debts.date')}
+                      </th>
+                    </tr>
                   </thead>
 
                   <tbody>

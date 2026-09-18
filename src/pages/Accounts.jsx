@@ -1,9 +1,24 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import {
+  Wallet,
+  Landmark,
+  CreditCard,
+  PiggyBank,
+  Pencil,
+  Trash2,
+  Plus,
+  X,
+  Save,
+} from 'lucide-react'
+
 import { useAccounts } from '../hooks/useAccounts'
 
 import './Accounts.css'
 
 function Accounts() {
+  const { t } = useTranslation()
+
   const {
     accounts,
     loading,
@@ -34,6 +49,64 @@ function Accounts() {
   const [deletingAccountId, setDeletingAccountId] = useState(null)
   const [deleteError, setDeleteError] = useState('')
 
+  // -----------------------------
+  // Account Icon
+  // -----------------------------
+
+  const getAccountIcon = (accountType) => {
+    switch (accountType) {
+      case 'bank':
+        return Landmark
+
+      case 'wallet':
+        return CreditCard
+
+      case 'savings':
+        return PiggyBank
+
+      default:
+        return Wallet
+    }
+  }
+
+  // -----------------------------
+  // Account Icon Class
+  // -----------------------------
+
+  const getAccountIconClass = (accountType) => {
+    switch (accountType) {
+      case 'bank':
+        return 'account-icon-bank'
+
+      case 'wallet':
+        return 'account-icon-wallet'
+
+      case 'savings':
+        return 'account-icon-savings'
+
+      default:
+        return 'account-icon-cash'
+    }
+  }
+
+  // -----------------------------
+  // Format Balance
+  // -----------------------------
+
+  const formatBalance = (balance, currency) => {
+    return `${Number(balance || 0).toLocaleString(
+      'en-US',
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }
+    )} ${currency}`
+  }
+
+  // -----------------------------
+  // Create Account
+  // -----------------------------
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -41,17 +114,20 @@ function Accounts() {
     setSuccess('')
 
     if (!name.trim()) {
-      setFormError('Please enter an account name.')
+      setFormError(
+        t('accounts.pleaseEnterName')
+      )
       return
     }
 
     setSaving(true)
 
-    const { account, error: createError } = await addAccount({
-      name: name.trim(),
-      type,
-      currency,
-    })
+    const { account, error: createError } =
+      await addAccount({
+        name: name.trim(),
+        type,
+        currency,
+      })
 
     if (createError) {
       setFormError(createError.message)
@@ -63,11 +139,21 @@ function Accounts() {
     setType('cash')
     setCurrency('EGP')
 
-    setSuccess('Account created successfully.')
+    setSuccess(
+      t('accounts.accountCreated')
+    )
+
     setSaving(false)
 
-    console.log('Created account:', account)
+    console.log(
+      'Created account:',
+      account
+    )
   }
+
+  // -----------------------------
+  // Edit
+  // -----------------------------
 
   const handleEditClick = (account) => {
     setEditingAccount(account)
@@ -93,33 +179,41 @@ function Accounts() {
     setSuccess('')
 
     if (!editName.trim()) {
-      setEditError('Please enter an account name.')
+      setEditError(
+        t('accounts.pleaseEnterName')
+      )
       return
     }
 
     if (editBalance === '') {
-      setEditError('Please enter a balance.')
+      setEditError(
+        t('accounts.pleaseEnterBalance')
+      )
       return
     }
 
-    const numericBalance = Number(editBalance)
+    const numericBalance =
+      Number(editBalance)
 
     if (!Number.isFinite(numericBalance)) {
-      setEditError('Please enter a valid balance.')
+      setEditError(
+        t('accounts.invalidBalance')
+      )
       return
     }
 
     setEditSaving(true)
 
-    const { error: updateError } = await editAccount(
-      editingAccount.id,
-      {
-        name: editName.trim(),
-        type: editType,
-        balance: numericBalance,
-        currency: editCurrency,
-      }
-    )
+    const { error: updateError } =
+      await editAccount(
+        editingAccount.id,
+        {
+          name: editName.trim(),
+          type: editType,
+          balance: numericBalance,
+          currency: editCurrency,
+        }
+      )
 
     if (updateError) {
       setEditError(updateError.message)
@@ -129,13 +223,23 @@ function Accounts() {
 
     setEditingAccount(null)
     setEditSaving(false)
-    setSuccess('Account updated successfully.')
+
+    setSuccess(
+      t('accounts.accountUpdated')
+    )
   }
 
+  // -----------------------------
+  // Delete
+  // -----------------------------
+
   const handleDeleteClick = async (account) => {
-    const confirmed = window.confirm(
-      `Are you sure you want to delete "${account.name}"?`
-    )
+    const confirmed =
+      window.confirm(
+        t('accounts.confirmDelete', {
+          name: account.name,
+        })
+      )
 
     if (!confirmed) {
       return
@@ -145,250 +249,644 @@ function Accounts() {
     setDeleteError('')
     setSuccess('')
 
-    const { error: deleteError } = await removeAccount(account.id)
+    const { error: deleteError } =
+      await removeAccount(account.id)
 
     if (deleteError) {
-      setDeleteError(deleteError.message)
+      setDeleteError(
+        deleteError.message
+      )
       setDeletingAccountId(null)
       return
     }
 
-    if (editingAccount?.id === account.id) {
+    if (
+      editingAccount?.id ===
+      account.id
+    ) {
       setEditingAccount(null)
     }
 
     setDeletingAccountId(null)
-    setSuccess('Account deleted successfully.')
+
+    setSuccess(
+      t('accounts.accountDeleted')
+    )
   }
 
   return (
     <div className="accounts-page">
 
+      {/* =========================
+          Header
+      ========================= */}
+
       <div className="accounts-header">
+
         <div>
-          <h1>Accounts</h1>
-          <p>Manage your accounts.</p>
+          <h1>
+            {t('accounts.title')}
+          </h1>
+
+          <p>
+            {t('accounts.subtitle')}
+          </p>
         </div>
+
+        <button
+          type="button"
+          className="primary-button accounts-add-button"
+          onClick={() =>
+            document
+              .getElementById(
+                'add-account-form'
+              )
+              ?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+              })
+          }
+        >
+          <Plus
+            size={17}
+            strokeWidth={2.5}
+          />
+
+          <span>
+            {t('accounts.addAccount')}
+          </span>
+        </button>
+
       </div>
 
-      {/* Add Account */}
-      <div className="account-form-section">
-        <h2>Add Account</h2>
+      {/* =========================
+          Messages
+      ========================= */}
 
-        <form onSubmit={handleSubmit}>
+      {success && (
+        <div className="account-message account-success">
+          {success}
+        </div>
+      )}
 
-          <div>
-            <label>Account Name</label>
+      {deleteError && (
+        <div className="account-message account-error">
+          {deleteError}
+        </div>
+      )}
 
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Cash"
+      {/* =========================
+          Add Account
+      ========================= */}
+
+      <section
+        id="add-account-form"
+        className="account-form-section"
+      >
+
+        <div className="account-section-heading">
+
+          <div className="account-section-icon">
+            <Plus
+              size={18}
+              strokeWidth={2.2}
             />
           </div>
 
           <div>
-            <label>Account Type</label>
+            <h2>
+              {t('accounts.addAccount')}
+            </h2>
+
+            <p>
+              {t('accounts.subtitle')}
+            </p>
+          </div>
+
+        </div>
+
+        <form onSubmit={handleSubmit}>
+
+          <div className="account-form-field">
+
+            <label>
+              {t('accounts.accountName')}
+            </label>
+
+            <input
+              type="text"
+              value={name}
+              onChange={(e) =>
+                setName(e.target.value)
+              }
+              placeholder={t(
+                'accounts.namePlaceholder'
+              )}
+            />
+
+          </div>
+
+          <div className="account-form-field">
+
+            <label>
+              {t('accounts.accountType')}
+            </label>
 
             <select
               value={type}
-              onChange={(e) => setType(e.target.value)}
+              onChange={(e) =>
+                setType(e.target.value)
+              }
             >
-              <option value="cash">Cash</option>
-              <option value="bank">Bank</option>
-              <option value="wallet">Wallet</option>
-              <option value="savings">Savings</option>
+              <option value="cash">
+                {t('accounts.cash')}
+              </option>
+
+              <option value="bank">
+                {t('accounts.bank')}
+              </option>
+
+              <option value="wallet">
+                {t('accounts.wallet')}
+              </option>
+
+              <option value="savings">
+                {t('accounts.savings')}
+              </option>
             </select>
+
           </div>
 
-          <div>
-            <label>Currency</label>
+          <div className="account-form-field">
+
+            <label>
+              {t('accounts.currency')}
+            </label>
 
             <select
               value={currency}
-              onChange={(e) => setCurrency(e.target.value)}
+              onChange={(e) =>
+                setCurrency(e.target.value)
+              }
             >
-              <option value="EGP">EGP</option>
-              <option value="USD">USD</option>
-              <option value="EUR">EUR</option>
-              <option value="SAR">SAR</option>
+              <option value="EGP">
+                EGP
+              </option>
+
+              <option value="USD">
+                USD
+              </option>
+
+              <option value="EUR">
+                EUR
+              </option>
+
+              <option value="SAR">
+                SAR
+              </option>
             </select>
+
           </div>
 
           <button
             type="submit"
-            className="primary-button"
+            className="primary-button account-submit-button"
             disabled={saving}
           >
-            {saving ? 'Creating...' : 'Create Account'}
+            <Plus
+              size={16}
+              strokeWidth={2.5}
+            />
+
+            <span>
+              {saving
+                ? t('accounts.creating')
+                : t('accounts.createAccount')}
+            </span>
           </button>
 
-          {formError && (
-            <p>{formError}</p>
-          )}
-
-          {success && (
-            <p>{success}</p>
-          )}
-
         </form>
-      </div>
 
-      {/* Accounts List */}
-      <div className="accounts-list-section">
-        <h2>Your Accounts</h2>
+        {formError && (
+          <p className="account-form-error">
+            {formError}
+          </p>
+        )}
+
+      </section>
+
+      {/* =========================
+          Accounts List
+      ========================= */}
+
+      <section className="accounts-list-section">
+
+        <div className="accounts-list-header">
+
+          <div>
+            <h2>
+              {t('accounts.yourAccounts')}
+            </h2>
+
+            <p>
+              {accounts.length}{' '}
+              {accounts.length === 1
+                ? 'account'
+                : 'accounts'}
+            </p>
+          </div>
+
+        </div>
+
+        {/* Loading */}
 
         {loading && (
-          <p>Loading accounts...</p>
+          <div className="accounts-state">
+            <div className="accounts-loading-spinner" />
+
+            <p>
+              {t('accounts.loading')}
+            </p>
+          </div>
         )}
+
+        {/* Error */}
 
         {!loading && error && (
-          <p>{error.message}</p>
+          <div className="accounts-state accounts-state-error">
+            <p>
+              {error.message}
+            </p>
+          </div>
         )}
 
-        {!loading && !error && accounts.length === 0 && (
-          <p>No accounts yet.</p>
-        )}
+        {/* Empty */}
 
-        {!loading && !error && accounts.length > 0 && (
-          <div>
+        {!loading &&
+          !error &&
+          accounts.length === 0 && (
+            <div className="accounts-state">
 
-            {accounts.map((account) => (
-              <div key={account.id}>
+              <div className="accounts-empty-icon">
+                <Wallet
+                  size={28}
+                  strokeWidth={1.8}
+                />
+              </div>
 
-                <h3>{account.name}</h3>
+              <h3>
+                {t('accounts.noAccounts')}
+              </h3>
 
-                <p>
-                  Type: {account.type}
-                </p>
+              <p>
+                {t('accounts.addAccount')}
+              </p>
 
-                <p>
-                  Balance: {account.balance} {account.currency}
-                </p>
+            </div>
+          )}
 
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => handleEditClick(account)}
-                >
-                  Edit
-                </button>
+        {/* Cards */}
 
-                <button
-                  type="button"
-                  className="secondary-button"
-                  onClick={() => handleDeleteClick(account)}
-                  disabled={deletingAccountId === account.id}
-                >
-                  {deletingAccountId === account.id
-                    ? 'Deleting...'
-                    : 'Delete'}
-                </button>
+        {!loading &&
+          !error &&
+          accounts.length > 0 && (
 
-                {/* Edit Account */}
-                {editingAccount?.id === account.id && (
-                  <div className="account-edit-form">
+            <div className="accounts-grid">
 
-                    <h3>Edit Account</h3>
+              {accounts.map((account) => {
 
-                    <form onSubmit={handleEditSubmit}>
+                const AccountIcon =
+                  getAccountIcon(
+                    account.type
+                  )
 
-                      <div>
-                        <label>Account Name</label>
+                const iconClass =
+                  getAccountIconClass(
+                    account.type
+                  )
 
-                        <input
-                          type="text"
-                          value={editName}
-                          onChange={(e) =>
-                            setEditName(e.target.value)
-                          }
+                return (
+
+                  <article
+                    key={account.id}
+                    className={`account-card ${
+                      editingAccount?.id ===
+                      account.id
+                        ? 'account-card-editing'
+                        : ''
+                    }`}
+                  >
+
+                    {/* Card Top */}
+
+                    <div className="account-card-top">
+
+                      <div
+                        className={`account-card-icon ${iconClass}`}
+                      >
+                        <AccountIcon
+                          size={21}
+                          strokeWidth={2}
                         />
                       </div>
 
-                      <div>
-                        <label>Account Type</label>
+                      <span className="account-type-badge">
+                        {t(
+                          `accounts.types.${account.type}`
+                        )}
+                      </span>
 
-                        <select
-                          value={editType}
-                          onChange={(e) =>
-                            setEditType(e.target.value)
-                          }
-                        >
-                          <option value="cash">Cash</option>
-                          <option value="bank">Bank</option>
-                          <option value="wallet">Wallet</option>
-                          <option value="savings">Savings</option>
-                        </select>
-                      </div>
+                    </div>
 
-                      <div>
-                        <label>Balance</label>
+                    {/* Name */}
 
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={editBalance}
-                          onChange={(e) =>
-                            setEditBalance(e.target.value)
-                          }
-                        />
-                      </div>
+                    <h3 className="account-card-name">
+                      {account.name}
+                    </h3>
 
-                      <div>
-                        <label>Currency</label>
+                    {/* Balance */}
 
-                        <select
-                          value={editCurrency}
-                          onChange={(e) =>
-                            setEditCurrency(e.target.value)
-                          }
-                        >
-                          <option value="EGP">EGP</option>
-                          <option value="USD">USD</option>
-                          <option value="EUR">EUR</option>
-                          <option value="SAR">SAR</option>
-                        </select>
-                      </div>
+                    <div className="account-card-balance-label">
+                      {t('accounts.balance')}
+                    </div>
+
+                    <div className="account-card-balance">
+                      {formatBalance(
+                        account.balance,
+                        account.currency
+                      )}
+                    </div>
+
+                    {/* Actions */}
+
+                    <div className="account-card-actions">
 
                       <button
-                        type="submit"
-                        className="primary-button"
-                        disabled={editSaving}
+                        type="button"
+                        className="account-action-button account-edit-button"
+                        onClick={() =>
+                          handleEditClick(account)
+                        }
                       >
-                        {editSaving
-                          ? 'Saving...'
-                          : 'Save Changes'}
+                        <Pencil
+                          size={15}
+                          strokeWidth={2}
+                        />
+
+                        <span>
+                          {t('accounts.edit')}
+                        </span>
                       </button>
 
                       <button
                         type="button"
-                        className="secondary-button"
-                        onClick={handleCancelEdit}
+                        className="account-action-button account-delete-button"
+                        onClick={() =>
+                          handleDeleteClick(
+                            account
+                          )
+                        }
+                        disabled={
+                          deletingAccountId ===
+                          account.id
+                        }
                       >
-                        Cancel
+                        <Trash2
+                          size={15}
+                          strokeWidth={2}
+                        />
+
+                        <span>
+                          {deletingAccountId ===
+                          account.id
+                            ? t(
+                                'accounts.deleting'
+                              )
+                            : t(
+                                'accounts.delete'
+                              )}
+                        </span>
                       </button>
 
-                      {editError && (
-                        <p>{editError}</p>
-                      )}
+                    </div>
 
-                    </form>
+                    {/* Edit Form */}
 
-                  </div>
-                )}
+                    {editingAccount?.id ===
+                      account.id && (
 
-              </div>
-            ))}
+                      <div className="account-edit-form">
 
-          </div>
-        )}
+                        <div className="account-edit-header">
 
-        {deleteError && (
-          <p>{deleteError}</p>
-        )}
+                          <div>
+                            <h3>
+                              {t(
+                                'accounts.editAccount'
+                              )}
+                            </h3>
+                          </div>
 
-      </div>
+                          <button
+                            type="button"
+                            className="account-edit-close"
+                            onClick={
+                              handleCancelEdit
+                            }
+                          >
+                            <X size={17} />
+                          </button>
+
+                        </div>
+
+                        <form
+                          onSubmit={
+                            handleEditSubmit
+                          }
+                        >
+
+                          <div className="account-form-field">
+
+                            <label>
+                              {t(
+                                'accounts.accountName'
+                              )}
+                            </label>
+
+                            <input
+                              type="text"
+                              value={editName}
+                              onChange={(e) =>
+                                setEditName(
+                                  e.target.value
+                                )
+                              }
+                            />
+
+                          </div>
+
+                          <div className="account-form-field">
+
+                            <label>
+                              {t(
+                                'accounts.accountType'
+                              )}
+                            </label>
+
+                            <select
+                              value={editType}
+                              onChange={(e) =>
+                                setEditType(
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="cash">
+                                {t(
+                                  'accounts.cash'
+                                )}
+                              </option>
+
+                              <option value="bank">
+                                {t(
+                                  'accounts.bank'
+                                )}
+                              </option>
+
+                              <option value="wallet">
+                                {t(
+                                  'accounts.wallet'
+                                )}
+                              </option>
+
+                              <option value="savings">
+                                {t(
+                                  'accounts.savings'
+                                )}
+                              </option>
+                            </select>
+
+                          </div>
+
+                          <div className="account-form-field">
+
+                            <label>
+                              {t(
+                                'accounts.balance'
+                              )}
+                            </label>
+
+                            <input
+                              type="number"
+                              step="0.01"
+                              value={
+                                editBalance
+                              }
+                              onChange={(e) =>
+                                setEditBalance(
+                                  e.target.value
+                                )
+                              }
+                            />
+
+                          </div>
+
+                          <div className="account-form-field">
+
+                            <label>
+                              {t(
+                                'accounts.currency'
+                              )}
+                            </label>
+
+                            <select
+                              value={
+                                editCurrency
+                              }
+                              onChange={(e) =>
+                                setEditCurrency(
+                                  e.target.value
+                                )
+                              }
+                            >
+                              <option value="EGP">
+                                EGP
+                              </option>
+
+                              <option value="USD">
+                                USD
+                              </option>
+
+                              <option value="EUR">
+                                EUR
+                              </option>
+
+                              <option value="SAR">
+                                SAR
+                              </option>
+                            </select>
+
+                          </div>
+
+                          <div className="account-edit-actions">
+
+                            <button
+                              type="submit"
+                              className="primary-button"
+                              disabled={
+                                editSaving
+                              }
+                            >
+                              <Save
+                                size={15}
+                                strokeWidth={2.2}
+                              />
+
+                              <span>
+                                {editSaving
+                                  ? t(
+                                      'accounts.saving'
+                                    )
+                                  : t(
+                                      'accounts.saveChanges'
+                                    )}
+                              </span>
+                            </button>
+
+                            <button
+                              type="button"
+                              className="secondary-button"
+                              onClick={
+                                handleCancelEdit
+                              }
+                            >
+                              {t(
+                                'accounts.cancel'
+                              )}
+                            </button>
+
+                          </div>
+
+                          {editError && (
+                            <p className="account-form-error">
+                              {editError}
+                            </p>
+                          )}
+
+                        </form>
+
+                      </div>
+                    )}
+
+                  </article>
+
+                )
+              })}
+
+            </div>
+          )}
+
+      </section>
 
     </div>
   )
