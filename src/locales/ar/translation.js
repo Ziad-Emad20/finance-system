@@ -433,7 +433,82 @@ categories: {
 
       logout: 'تسجيل الخروج',
     },
+
+
+     auth: {
+  brand: 'ZE Finance',
+
+  welcomeBack: 'مرحبًا بعودتك',
+  loginSubtitle: 'سجل الدخول لإدارة أموالك.',
+
+  email: 'البريد الإلكتروني',
+  emailPlaceholder: 'أدخل بريدك الإلكتروني',
+
+  password: 'كلمة المرور',
+  passwordPlaceholder: 'أدخل كلمة المرور',
+
+  login: 'تسجيل الدخول',
+  loggingIn: 'جاري تسجيل الدخول...',
+
+  forgotPassword: 'نسيت كلمة المرور؟',
+  noAccount: 'ليس لديك حساب؟',
+  createAccount: 'إنشاء حساب',
+
+  createAccountTitle: 'إنشاء حساب',
+  registerSubtitle: 'ابدأ في إدارة أموالك.',
+
+  confirmPassword: 'تأكيد كلمة المرور',
+  confirmPasswordPlaceholder:
+    'أكد كلمة المرور',
+
+  creatingAccount: 'جاري إنشاء الحساب...',
+  alreadyHaveAccount: 'لديك حساب بالفعل؟',
+
+  forgotPasswordTitle: 'نسيت كلمة المرور؟',
+  forgotPasswordSubtitle:
+    'أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.',
+
+  sendResetLink: 'إرسال رابط إعادة التعيين',
+  sending: 'جاري الإرسال...',
+
+  resetLinkSent:
+    'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.',
+
+  backToLogin: 'العودة لتسجيل الدخول',
+
+  resetPasswordTitle: 'إنشاء كلمة مرور جديدة',
+  resetPasswordSubtitle:
+    'اختر كلمة مرور جديدة لحسابك.',
+
+  newPassword: 'كلمة المرور الجديدة',
+  newPasswordPlaceholder:
+    'أدخل كلمة المرور الجديدة',
+
+  confirmNewPasswordPlaceholder:
+    'أكد كلمة المرور الجديدة',
+
+  updatePassword: 'تحديث كلمة المرور',
+  updating: 'جاري التحديث...',
+
+  passwordUpdated:
+    'تم تحديث كلمة المرور بنجاح.',
+
+  passwordMinLength:
+    'يجب أن تكون كلمة المرور 6 أحرف على الأقل.',
+
+  passwordsDoNotMatch:
+    'كلمتا المرور غير متطابقتين.',
+
+  showPassword: 'إظهار كلمة المرور',
+  hidePassword: 'إخفاء كلمة المرور',
+  checkYourEmail: 'راجع إيميلك',
+verificationEmailSent:
+  'بعتنالك لينك تفعيل على إيميلك عشان تفعّل حسابك.',
+emailVerificationHint:
+  'افتح الإيميل واضغط على لينك التفعيل عشان تفعّل حسابك. ولو مش لاقي الرسالة، راجع الـ Spam.',
+},
   },
+ 
 }
 
 export default ar

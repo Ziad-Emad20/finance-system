@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import { Menu } from 'lucide-react'
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
+import {
+  Menu,
+  WalletCards,
+} from 'lucide-react'
 
 import Sidebar from '../components/Sidebar'
 
@@ -17,9 +20,24 @@ function DashboardLayout() {
     <div className="dashboard-layout">
 
       {/* Mobile Header */}
-
       <header className="mobile-header">
 
+        {/* Logo */}
+        <Link
+          to="/dashboard"
+          className="mobile-header-brand"
+          onClick={closeSidebar}
+        >
+          <div className="mobile-header-brand-icon">
+            <WalletCards size={18} strokeWidth={2.2} />
+          </div>
+
+          <span>
+            ZE Finance
+          </span>
+        </Link>
+
+        {/* Menu */}
         <button
           className="mobile-menu-button"
           onClick={() => setSidebarOpen(true)}
@@ -28,21 +46,15 @@ function DashboardLayout() {
           <Menu size={22} />
         </button>
 
-        {/* <div className="mobile-header-title">
-          ZE Finance
-        </div> */}
-
       </header>
 
       {/* Sidebar */}
-
       <Sidebar
         isOpen={sidebarOpen}
         onClose={closeSidebar}
       />
 
       {/* Mobile Overlay */}
-
       {sidebarOpen && (
         <div
           className="sidebar-overlay"
@@ -51,7 +63,6 @@ function DashboardLayout() {
       )}
 
       {/* Main Content */}
-
       <main className="main-content">
         <Outlet />
       </main>

@@ -4,7 +4,9 @@
 
 .accounts-page {
   width: 100%;
+  max-width: 1440px;
   min-width: 0;
+  margin: 0 auto;
   box-sizing: border-box;
 }
 
@@ -14,26 +16,32 @@
 
 .accounts-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 
-  gap: 20px;
+  gap: 24px;
 
   margin-bottom: 22px;
 }
 
+.accounts-header > div {
+  min-width: 0;
+}
+
 .accounts-header h1 {
-  margin: 0;
+  margin: 0 0 6px;
 
   color: var(--text-primary);
 
-  font-size: 28px;
+  font-size: 30px;
   line-height: 1.2;
-  font-weight: 700;
+  font-weight: 750;
+
+  letter-spacing: -0.5px;
 }
 
 .accounts-header p {
-  margin: 6px 0 0;
+  margin: 0;
 
   color: var(--text-secondary);
 
@@ -47,6 +55,8 @@
   justify-content: center;
 
   gap: 7px;
+
+  min-height: 42px;
 
   flex-shrink: 0;
 }
@@ -64,6 +74,8 @@
 
   font-size: 13px;
   font-weight: 500;
+
+  animation: accountMessageIn 0.2s ease;
 }
 
 .account-success {
@@ -78,14 +90,26 @@
   color: #dc2626;
 }
 
+@keyframes accountMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* =========================================================
    Add Account Section
 ========================================================= */
 
 .account-form-section {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 
-  padding: 22px;
+  padding: 20px;
 
   background: var(--surface);
 
@@ -94,15 +118,18 @@
   border-radius: 16px;
 
   box-sizing: border-box;
+
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.025);
 }
 
 .account-section-heading {
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 11px;
 
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .account-section-icon {
@@ -118,7 +145,7 @@
   border-radius: 10px;
 
   background: #eff6ff;
-  color: var(--primary);
+  color: #2563eb;
 }
 
 .account-section-heading h2 {
@@ -149,7 +176,7 @@
     minmax(130px, 0.8fr)
     auto;
 
-  gap: 14px;
+  gap: 13px;
 
   align-items: end;
 }
@@ -165,9 +192,9 @@
 
   color: var(--text-secondary);
 
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.3;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .account-form-section input,
@@ -186,19 +213,23 @@
 
   border-radius: 9px;
 
-  background: var(--background);
-
+  background: #f8fafc;
   color: var(--text-primary);
 
   font-family: inherit;
-
   font-size: 13px;
 
   outline: none;
 
   transition:
     border-color 0.2s ease,
+    background-color 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+.account-form-section input::placeholder,
+.account-edit-form input::placeholder {
+  color: #94a3b8;
 }
 
 .account-form-section input:focus,
@@ -206,6 +237,8 @@
 .account-edit-form input:focus,
 .account-edit-form select:focus {
   border-color: var(--primary);
+
+  background: var(--surface);
 
   box-shadow:
     0 0 0 3px rgba(37, 99, 235, 0.08);
@@ -220,11 +253,13 @@
 
   gap: 7px;
 
+  padding: 0 15px;
+
   white-space: nowrap;
 }
 
 .account-form-error {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
 
   color: var(--danger);
 
@@ -239,7 +274,7 @@
 .accounts-list-section {
   width: 100%;
 
-  padding: 22px;
+  padding: 20px;
 
   box-sizing: border-box;
 
@@ -248,6 +283,9 @@
   border: 1px solid var(--border);
 
   border-radius: 16px;
+
+  box-shadow:
+    0 2px 8px rgba(15, 23, 42, 0.025);
 }
 
 .accounts-list-header {
@@ -255,7 +293,7 @@
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 18px;
+  margin-bottom: 17px;
 }
 
 .accounts-list-header h2 {
@@ -277,7 +315,7 @@
 }
 
 /* =========================================================
-   Cards Grid
+   Accounts Grid
 ========================================================= */
 
 .accounts-grid {
@@ -286,7 +324,7 @@
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 13px;
 }
 
 /* =========================================================
@@ -294,9 +332,9 @@
 ========================================================= */
 
 .account-card {
-  min-width: 0;
-
   position: relative;
+
+  min-width: 0;
 
   padding: 18px;
 
@@ -308,26 +346,58 @@
 
   border-radius: 14px;
 
+  overflow: hidden;
+
   transition:
     transform 0.2s ease,
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
 
+.account-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 3px;
+  height: 100%;
+
+  background: #2563eb;
+
+  opacity: 0.85;
+}
+
 .account-card:hover {
   transform: translateY(-2px);
 
-  border-color: #cfd8e5;
+  border-color: #d1dbe8;
 
   box-shadow:
-    0 8px 24px rgba(15, 23, 42, 0.06);
+    0 10px 24px rgba(15, 23, 42, 0.06);
 }
 
 .account-card-editing {
-  border-color: var(--primary);
+  border-color: #93c5fd;
 
   box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.08);
+    0 0 0 3px rgba(37, 99, 235, 0.07);
+}
+
+/* Account Type Accent */
+
+.account-card:has(.account-icon-bank)::before {
+  background: #16a34a;
+}
+
+.account-card:has(.account-icon-wallet)::before {
+  background: #7c3aed;
+}
+
+.account-card:has(.account-icon-savings)::before {
+  background: #ea580c;
 }
 
 /* =========================================================
@@ -382,9 +452,10 @@
 
   border-radius: 7px;
 
-  background: var(--background);
-
+  background: #f8fafc;
   color: var(--text-secondary);
+
+  border: 1px solid #eef2f7;
 
   font-size: 10px;
   line-height: 1;
@@ -398,7 +469,7 @@
 ========================================================= */
 
 .account-card-name {
-  margin: 0 0 14px;
+  margin: 0 0 13px;
 
   color: var(--text-primary);
 
@@ -407,9 +478,7 @@
   font-weight: 700;
 
   overflow: hidden;
-
   text-overflow: ellipsis;
-
   white-space: nowrap;
 }
 
@@ -418,22 +487,23 @@
 
   color: var(--text-secondary);
 
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 550;
 }
 
 .account-card-balance {
-  margin-bottom: 18px;
+  margin-bottom: 17px;
 
   color: var(--text-primary);
 
   font-size: 24px;
   line-height: 1.2;
-  font-weight: 700;
+  font-weight: 750;
+
+  letter-spacing: -0.4px;
 
   overflow: hidden;
-
   text-overflow: ellipsis;
-
   white-space: nowrap;
 }
 
@@ -448,7 +518,7 @@
 
   gap: 8px;
 
-  padding-top: 14px;
+  padding-top: 13px;
 
   border-top: 1px solid var(--border);
 }
@@ -482,7 +552,7 @@
 .account-edit-button {
   border: 1px solid var(--border);
 
-  background: var(--background);
+  background: #f8fafc;
 
   color: var(--text-primary);
 }
@@ -505,6 +575,8 @@
 
 .account-delete-button:hover {
   background: #fef2f2;
+
+  border-color: #fca5a5;
 }
 
 .account-action-button:disabled {
@@ -518,13 +590,13 @@
 ========================================================= */
 
 .account-edit-form {
-  margin-top: 16px;
+  margin-top: 15px;
 
-  padding: 16px;
+  padding: 15px;
 
   box-sizing: border-box;
 
-  background: var(--background);
+  background: #f8fafc;
 
   border: 1px solid var(--border);
 
@@ -536,7 +608,7 @@
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 }
 
 .account-edit-header h3 {
@@ -544,7 +616,7 @@
 
   color: var(--text-primary);
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
 }
 
@@ -567,11 +639,14 @@
   border-radius: 7px;
 
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .account-edit-close:hover {
   background: var(--surface);
-
   color: var(--text-primary);
 }
 
@@ -581,7 +656,7 @@
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 13px;
+  gap: 12px;
 }
 
 .account-edit-form .account-edit-actions {
@@ -596,7 +671,7 @@
 
 .account-edit-actions .primary-button,
 .account-edit-actions .secondary-button {
-  min-height: 38px;
+  min-height: 37px;
 
   display: inline-flex;
   align-items: center;
@@ -606,7 +681,7 @@
 
   padding: 0 12px;
 
-  font-size: 12px;
+  font-size: 11px;
 }
 
 /* =========================================================
@@ -614,7 +689,7 @@
 ========================================================= */
 
 .accounts-state {
-  min-height: 180px;
+  min-height: 190px;
 
   display: flex;
   flex-direction: column;
@@ -655,9 +730,11 @@
 
   border-radius: 14px;
 
-  background: var(--background);
+  background: #f8fafc;
 
   color: var(--text-secondary);
+
+  border: 1px solid var(--border);
 }
 
 .accounts-loading-spinner {
@@ -683,7 +760,12 @@
    Tablet
 ========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 1050px) {
+
+  .accounts-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
 
   .account-form-section form {
     grid-template-columns:
@@ -692,11 +774,6 @@
 
   .account-submit-button {
     width: 100%;
-  }
-
-  .accounts-grid {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -707,6 +784,8 @@
 @media (max-width: 650px) {
 
   .accounts-header {
+    align-items: flex-start;
+
     gap: 12px;
 
     margin-bottom: 18px;
@@ -744,16 +823,34 @@
   .account-section-icon {
     width: 34px;
     height: 34px;
+
+    border-radius: 9px;
+  }
+
+  .account-section-heading h2 {
+    font-size: 15px;
+  }
+
+  .account-section-heading p {
+    font-size: 10.5px;
   }
 
   .account-form-section form {
     grid-template-columns: 1fr;
 
-    gap: 12px;
+    gap: 11px;
   }
 
   .account-submit-button {
     width: 100%;
+  }
+
+  .accounts-list-header {
+    margin-bottom: 14px;
+  }
+
+  .accounts-list-header h2 {
+    font-size: 15px;
   }
 
   .accounts-grid {
@@ -764,6 +861,8 @@
 
   .account-card {
     padding: 15px;
+
+    border-radius: 13px;
   }
 
   .account-card-balance {
@@ -792,10 +891,6 @@
 
 @media (max-width: 400px) {
 
-  .accounts-header {
-    align-items: flex-start;
-  }
-
   .accounts-header h1 {
     font-size: 21px;
   }
@@ -810,12 +905,20 @@
     padding: 0;
   }
 
+  .account-card {
+    padding: 14px;
+  }
+
   .account-card-actions {
     gap: 6px;
   }
 
   .account-action-button {
     font-size: 10px;
+  }
+
+  .account-card-balance {
+    font-size: 20px;
   }
 }
 
@@ -834,4 +937,9 @@
 [dir='rtl'] .account-edit-form input,
 [dir='rtl'] .account-edit-form select {
   text-align: right;
+}
+
+[dir='rtl'] .account-card::before {
+  left: auto;
+  right: 0;
 }

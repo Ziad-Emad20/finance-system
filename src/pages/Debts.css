@@ -1,0 +1,752 @@
+/* =========================================================
+   Debts Page
+========================================================= */
+
+.debts-page {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   Header
+========================================================= */
+
+.debts-header {
+  margin-bottom: 22px;
+}
+
+.debts-header h1 {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.debts-header p {
+  margin: 6px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   Summary
+========================================================= */
+
+.debts-summary-cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 14px;
+
+  margin-bottom: 22px;
+}
+
+.debt-summary-card {
+  min-width: 0;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 14px;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.debt-summary-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 4px;
+  height: 100%;
+}
+
+.receivable-summary::before {
+  background: #16a34a;
+}
+
+.payable-summary::before {
+  background: #ef4444;
+}
+
+.total-summary::before {
+  background: #2563eb;
+}
+
+.debt-summary-top {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin-bottom: 12px;
+}
+
+.debt-summary-icon {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+}
+
+.receivable-summary .debt-summary-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+.payable-summary .debt-summary-icon {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.total-summary .debt-summary-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.debt-summary-top span {
+  color: var(--text-secondary);
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+.debt-summary-card h2 {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 22px;
+
+  line-height: 1.25;
+
+  font-weight: 700;
+
+  direction: ltr;
+
+  text-align: start;
+}
+
+.debt-summary-card p {
+  margin: 7px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   Sections
+========================================================= */
+
+.debts-section {
+  margin-bottom: 22px;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  margin-bottom: 18px;
+}
+
+.section-title-wrapper {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  min-width: 0;
+}
+
+.debt-section-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+}
+
+.receivable-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+.payable-icon {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.section-title-wrapper h2 {
+  margin: 0 0 3px;
+
+  color: var(--text-primary);
+
+  font-size: 16px;
+
+  line-height: 1.3;
+
+  font-weight: 700;
+}
+
+.section-title-wrapper p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+
+  line-height: 1.4;
+}
+
+.debt-count {
+  min-width: 26px;
+  height: 26px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 7px;
+
+  box-sizing: border-box;
+
+  border-radius: 8px;
+
+  font-size: 10px;
+
+  font-weight: 700;
+}
+
+.receivable-count {
+  background: #ecfdf5;
+  color: #15803d;
+}
+
+.payable-count {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* =========================================================
+   Table
+========================================================= */
+
+.debts-table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+
+  border: 1px solid var(--border);
+
+  border-radius: 11px;
+}
+
+.debts-table {
+  width: 100%;
+
+  min-width: 720px;
+
+  border-collapse: collapse;
+
+  font-size: 12px;
+}
+
+.debts-table th {
+  height: 42px;
+
+  padding: 0 12px;
+
+  background: var(--background);
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  text-align: start;
+
+  white-space: nowrap;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.debts-table td {
+  height: 55px;
+
+  padding: 0 12px;
+
+  color: var(--text-primary);
+
+  border-bottom: 1px solid var(--border);
+
+  white-space: nowrap;
+}
+
+.debts-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.debts-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.debts-table tbody tr:hover {
+  background: var(--background);
+}
+
+/* =========================================================
+   Person
+========================================================= */
+
+.debt-person {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  min-width: 0;
+}
+
+.debt-person-icon {
+  width: 30px;
+  height: 30px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--background);
+
+  color: var(--text-secondary);
+}
+
+.debt-person strong {
+  max-width: 150px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: var(--text-primary);
+
+  font-size: 12px;
+}
+
+.debt-transaction-title {
+  display: block;
+
+  max-width: 170px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: var(--text-secondary);
+}
+
+.debt-remaining {
+  color: var(--primary);
+
+  font-weight: 700;
+}
+
+.debt-date {
+  color: var(--text-secondary);
+}
+
+/* =========================================================
+   Mobile Cards
+========================================================= */
+
+.debts-mobile-list {
+  display: none;
+}
+
+.debt-mobile-card {
+  padding: 14px;
+
+  background: var(--background);
+
+  border: 1px solid var(--border);
+
+  border-radius: 11px;
+}
+
+.debt-mobile-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+}
+
+.debt-mobile-top .debt-person {
+  min-width: 0;
+}
+
+.debt-mobile-top .debt-person > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.debt-mobile-top .debt-person strong {
+  max-width: 150px;
+}
+
+.debt-mobile-top .debt-person span {
+  max-width: 150px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: var(--text-secondary);
+
+  font-size: 10px;
+}
+
+.debt-mobile-remaining {
+  flex-shrink: 0;
+
+  color: var(--primary);
+
+  font-size: 13px;
+
+  direction: ltr;
+}
+
+.debt-mobile-details {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 8px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid var(--border);
+}
+
+.debt-mobile-details > div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+
+  min-width: 0;
+}
+
+.debt-mobile-details span {
+  color: var(--text-secondary);
+
+  font-size: 9px;
+}
+
+.debt-mobile-details strong {
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: var(--text-primary);
+
+  font-size: 10px;
+
+  direction: ltr;
+
+  text-align: start;
+}
+
+/* =========================================================
+   Empty State
+========================================================= */
+
+.debt-empty-state {
+  min-height: 150px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.debt-empty-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 9px;
+
+  border-radius: 13px;
+
+  background: var(--background);
+
+  color: var(--text-secondary);
+}
+
+.debt-empty-state p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   Loading / Error
+========================================================= */
+
+.debts-state {
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.debts-state p {
+  margin: 9px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+}
+
+.debts-state-error p {
+  color: var(--danger);
+}
+
+.debts-loading-spinner {
+  width: 28px;
+  height: 28px;
+
+  border: 3px solid var(--border);
+
+  border-top-color: var(--primary);
+
+  border-radius: 50%;
+
+  animation: debtsSpin 0.7s linear infinite;
+}
+
+@keyframes debtsSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* =========================================================
+   Tablet
+========================================================= */
+
+@media (max-width: 1000px) {
+
+  .debts-summary-cards {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .total-summary {
+    grid-column: 1 / -1;
+  }
+
+}
+
+/* =========================================================
+   Mobile
+========================================================= */
+
+@media (max-width: 700px) {
+
+  .debts-header {
+    margin-bottom: 18px;
+  }
+
+  .debts-header h1 {
+    font-size: 23px;
+  }
+
+  .debts-header p {
+    font-size: 12px;
+  }
+
+  .debts-summary-cards {
+    grid-template-columns: 1fr;
+
+    gap: 9px;
+
+    margin-bottom: 18px;
+  }
+
+  .total-summary {
+    grid-column: auto;
+  }
+
+  .debt-summary-card {
+    padding: 15px;
+  }
+
+  .debt-summary-card h2 {
+    font-size: 20px;
+  }
+
+  .debts-section {
+    padding: 14px;
+
+    border-radius: 14px;
+
+    margin-bottom: 16px;
+  }
+
+  .section-header {
+    margin-bottom: 14px;
+  }
+
+  .section-title-wrapper {
+    gap: 9px;
+  }
+
+  .debt-section-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .section-title-wrapper h2 {
+    font-size: 14px;
+  }
+
+  .section-title-wrapper p {
+    font-size: 10px;
+  }
+
+  .debts-table-wrapper {
+    display: none;
+  }
+
+  .debts-mobile-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+  }
+
+}
+
+/* =========================================================
+   Small Mobile
+========================================================= */
+
+@media (max-width: 420px) {
+
+  .debts-section {
+    padding: 12px;
+  }
+
+  .debt-summary-card {
+    padding: 13px;
+  }
+
+  .debt-mobile-card {
+    padding: 12px;
+  }
+
+  .debt-mobile-details {
+    gap: 5px;
+  }
+
+  .debt-mobile-details strong {
+    font-size: 9px;
+  }
+
+}
+
+/* =========================================================
+   RTL
+========================================================= */
+
+[dir='rtl'] .debts-header,
+[dir='rtl'] .section-title-wrapper,
+[dir='rtl'] .debt-person,
+[dir='rtl'] .debt-mobile-top {
+  direction: rtl;
+}
+
+[dir='rtl'] .debts-table th,
+[dir='rtl'] .debts-table td {
+  text-align: right;
+}
+
+[dir='rtl'] .debt-summary-card h2,
+[dir='rtl'] .debt-mobile-remaining,
+[dir='rtl'] .debt-mobile-details strong {
+  direction: rtl;
+}

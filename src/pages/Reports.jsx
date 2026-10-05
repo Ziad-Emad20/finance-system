@@ -1,5 +1,16 @@
 import { useMemo, useState } from 'react'
+
 import { useTranslation } from 'react-i18next'
+
+import {
+  Activity,
+  ArrowDownRight,
+  ArrowUpRight,
+  CalendarDays,
+  CircleDollarSign,
+  TrendingDown,
+  TrendingUp,
+} from 'lucide-react'
 
 import { useTransactions } from '../hooks/useTransactions'
 
@@ -68,11 +79,13 @@ function Reports() {
     let endDate = todayString
 
     // All Time
+
     if (period === 'all') {
       return transactions
     }
 
     // This Month
+
     if (period === 'this-month') {
       const start = new Date(
         today.getFullYear(),
@@ -85,6 +98,7 @@ function Reports() {
     }
 
     // Last Month
+
     if (period === 'last-month') {
       const start = new Date(
         today.getFullYear(),
@@ -106,6 +120,7 @@ function Reports() {
     }
 
     // Last 3 Months
+
     if (period === 'last-3-months') {
       const start = new Date(
         today.getFullYear(),
@@ -118,6 +133,7 @@ function Reports() {
     }
 
     // This Year
+
     if (period === 'this-year') {
       const start = new Date(
         today.getFullYear(),
@@ -130,6 +146,7 @@ function Reports() {
     }
 
     // Custom Range
+
     if (period === 'custom') {
       if (
         !customStartDate ||
@@ -374,7 +391,6 @@ function Reports() {
         </div>
 
         {period === 'custom' && (
-
           <div className="custom-date-fields">
 
             <div className="reports-filter-field">
@@ -420,7 +436,6 @@ function Reports() {
             </div>
 
           </div>
-
         )}
 
       </div>
@@ -429,11 +444,19 @@ function Reports() {
 
       <div className="reports-summary">
 
-        <div className="report-summary-card">
+        <div className="report-summary-card income-summary">
 
-          <span>
-            {t('reports.totalIncome')}
-          </span>
+          <div className="report-summary-top">
+
+            <div className="report-summary-icon">
+              <TrendingUp size={19} />
+            </div>
+
+            <span>
+              {t('reports.totalIncome')}
+            </span>
+
+          </div>
 
           <h2>
             {formatAmount(totalIncome)}
@@ -441,11 +464,19 @@ function Reports() {
 
         </div>
 
-        <div className="report-summary-card">
+        <div className="report-summary-card expense-summary">
 
-          <span>
-            {t('reports.totalExpenses')}
-          </span>
+          <div className="report-summary-top">
+
+            <div className="report-summary-icon">
+              <TrendingDown size={19} />
+            </div>
+
+            <span>
+              {t('reports.totalExpenses')}
+            </span>
+
+          </div>
 
           <h2>
             {formatAmount(totalExpenses)}
@@ -453,11 +484,19 @@ function Reports() {
 
         </div>
 
-        <div className="report-summary-card">
+        <div className="report-summary-card cashflow-summary">
 
-          <span>
-            {t('reports.netCashFlow')}
-          </span>
+          <div className="report-summary-top">
+
+            <div className="report-summary-icon">
+              <Activity size={19} />
+            </div>
+
+            <span>
+              {t('reports.netCashFlow')}
+            </span>
+
+          </div>
 
           <h2
             className={
@@ -466,7 +505,6 @@ function Reports() {
                 : 'negative'
             }
           >
-
             {netCashFlow >= 0
               ? '+'
               : '-'}
@@ -474,18 +512,25 @@ function Reports() {
             {formatAmount(
               Math.abs(netCashFlow)
             )}
-
           </h2>
 
         </div>
 
-        <div className="report-summary-card">
+        <div className="report-summary-card average-summary">
 
-          <span>
-            {t(
-              'reports.averageMonthlyIncome'
-            )}
-          </span>
+          <div className="report-summary-top">
+
+            <div className="report-summary-icon">
+              <CircleDollarSign size={19} />
+            </div>
+
+            <span>
+              {t(
+                'reports.averageMonthlyIncome'
+              )}
+            </span>
+
+          </div>
 
           <h2>
             {formatAmount(
@@ -507,19 +552,27 @@ function Reports() {
 
           <div className="report-card-header">
 
-            <div>
+            <div className="report-card-title-row">
 
-              <h2>
-                {t(
-                  'reports.incomeByCategory'
-                )}
-              </h2>
+              <div className="report-card-icon income-report-icon">
+                <ArrowDownRight size={18} />
+              </div>
 
-              <p>
-                {t(
-                  'reports.incomeBreakdown'
-                )}
-              </p>
+              <div>
+
+                <h2>
+                  {t(
+                    'reports.incomeByCategory'
+                  )}
+                </h2>
+
+                <p>
+                  {t(
+                    'reports.incomeBreakdown'
+                  )}
+                </p>
+
+              </div>
 
             </div>
 
@@ -596,19 +649,27 @@ function Reports() {
 
           <div className="report-card-header">
 
-            <div>
+            <div className="report-card-title-row">
 
-              <h2>
-                {t(
-                  'reports.expensesByCategory'
-                )}
-              </h2>
+              <div className="report-card-icon expense-report-icon">
+                <ArrowUpRight size={18} />
+              </div>
 
-              <p>
-                {t(
-                  'reports.expensesBreakdown'
-                )}
-              </p>
+              <div>
+
+                <h2>
+                  {t(
+                    'reports.expensesByCategory'
+                  )}
+                </h2>
+
+                <p>
+                  {t(
+                    'reports.expensesBreakdown'
+                  )}
+                </p>
+
+              </div>
 
             </div>
 
@@ -687,19 +748,27 @@ function Reports() {
 
         <div className="report-card-header">
 
-          <div>
+          <div className="report-card-title-row">
 
-            <h2>
-              {t(
-                'reports.monthlyFinancialReport'
-              )}
-            </h2>
+            <div className="report-card-icon monthly-report-icon">
+              <CalendarDays size={18} />
+            </div>
 
-            <p>
-              {t(
-                'reports.monthlyReportDescription'
-              )}
-            </p>
+            <div>
+
+              <h2>
+                {t(
+                  'reports.monthlyFinancialReport'
+                )}
+              </h2>
+
+              <p>
+                {t(
+                  'reports.monthlyReportDescription'
+                )}
+              </p>
+
+            </div>
 
           </div>
 
@@ -755,9 +824,7 @@ function Reports() {
                     net,
                   }) => (
 
-                    <tr
-                      key={month}
-                    >
+                    <tr key={month}>
 
                       <td>
                         <strong>
@@ -780,7 +847,6 @@ function Reports() {
                             : 'expense'
                         }
                       >
-
                         {net >= 0
                           ? '+'
                           : '-'}
@@ -788,7 +854,6 @@ function Reports() {
                         {formatAmount(
                           Math.abs(net)
                         )}
-
                       </td>
 
                     </tr>

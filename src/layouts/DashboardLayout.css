@@ -206,6 +206,7 @@
 ========================================================= */
 
 @media (max-width: 900px) {
+
   .sidebar {
     width: 220px;
   }
@@ -229,21 +230,23 @@
     overflow-x: hidden;
   }
 
-  /* -------------------------
+  /* =======================================================
      Mobile Topbar
-  ------------------------- */
+     IMPORTANT:
+     Always LTR regardless of page language
+  ======================================================= */
 
   .mobile-header {
-    height: 58px;
+    height: 62px;
 
     box-sizing: border-box;
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     padding: 0 16px;
 
-    /* نفس لون الـ Sidebar */
     background: #111827;
 
     border-bottom: 1px solid #1f2937;
@@ -252,15 +255,77 @@
     top: 0;
 
     z-index: 90;
+
+    direction: ltr;
   }
 
+  /* =======================================================
+     Mobile Logo
+     Always on the LEFT
+  ======================================================= */
+
+  .mobile-header-brand {
+    position: static;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    direction: ltr;
+
+    flex-shrink: 0;
+  }
+
+  .mobile-header-brand:hover {
+    opacity: 0.9;
+  }
+
+  .mobile-header-brand-icon {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 9px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    box-shadow:
+      0 3px 10px rgba(37, 99, 235, 0.25);
+  }
+
+  /* =======================================================
+     Menu Button
+     Always on the RIGHT
+  ======================================================= */
+
   .mobile-menu-button {
+    position: static;
+
     width: 38px;
     height: 38px;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    flex-shrink: 0;
 
     padding: 0;
 
@@ -274,28 +339,24 @@
 
     cursor: pointer;
 
+    direction: ltr;
+
     transition:
-      background-color 0.2s ease;
+      background-color 0.2s ease,
+      color 0.2s ease;
   }
 
   .mobile-menu-button:hover {
     background: #1f2937;
   }
 
-  .mobile-header-title {
-    margin-left: 10px;
-
-    color: #ffffff;
-
-    font-size: 16px;
-    font-weight: 700;
-
-    white-space: nowrap;
+  .mobile-menu-button:active {
+    background: #253044;
   }
 
-  /* -------------------------
+  /* =======================================================
      Sidebar Drawer
-  ------------------------- */
+  ======================================================= */
 
   .sidebar {
     position: fixed;
@@ -356,9 +417,9 @@
     gap: 12px;
   }
 
-  /* -------------------------
+  /* =======================================================
      Overlay
-  ------------------------- */
+  ======================================================= */
 
   .sidebar-overlay {
     display: block;
@@ -374,9 +435,9 @@
     animation: sidebarOverlayIn 0.2s ease;
   }
 
-  /* -------------------------
+  /* =======================================================
      Main Content
-  ------------------------- */
+  ======================================================= */
 
   .main-content {
     width: 100%;
@@ -395,19 +456,31 @@
 @media (max-width: 420px) {
 
   .mobile-header {
-    height: 56px;
+    height: 58px;
 
     padding: 0 13px;
+
+    direction: ltr;
+  }
+
+  .mobile-header-brand {
+    font-size: 15px;
+    gap: 7px;
+  }
+
+  .mobile-header-brand-icon {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+    color: #ffffff;
   }
 
   .mobile-menu-button {
     width: 36px;
     height: 36px;
-  }
-
-  .mobile-header-title {
-    margin-left: 8px;
-    font-size: 15px;
   }
 
   .sidebar {
@@ -432,6 +505,8 @@
 
 /* =========================================================
    RTL
+   Sidebar changes direction normally,
+   Mobile Topbar DOES NOT change direction
 ========================================================= */
 
 [dir='rtl'] .sidebar {
@@ -439,13 +514,22 @@
   border-left: 1px solid #1f2937;
 }
 
-[dir='rtl'] .mobile-header-title {
-  margin-left: 0;
-  margin-right: 10px;
-}
-
 @media (max-width: 768px) {
 
+  /* Keep Mobile Header LTR */
+  [dir='rtl'] .mobile-header {
+    direction: ltr;
+  }
+
+  [dir='rtl'] .mobile-header-brand {
+    direction: ltr;
+  }
+
+  [dir='rtl'] .mobile-menu-button {
+    direction: ltr;
+  }
+
+  /* RTL Sidebar */
   [dir='rtl'] .sidebar {
     left: auto;
     right: 0;
@@ -459,11 +543,6 @@
     box-shadow:
       -10px 0 35px rgba(0, 0, 0, 0.25);
   }
-
-  [dir='rtl'] .mobile-header-title {
-    margin-left: 0;
-    margin-right: 8px;
-  }
 }
 
 /* =========================================================
@@ -471,6 +550,7 @@
 ========================================================= */
 
 @keyframes sidebarOverlayIn {
+
   from {
     opacity: 0;
   }

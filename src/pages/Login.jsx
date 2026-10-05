@@ -1,8 +1,20 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+import {
+  WalletCards,
+  Mail,
+  LockKeyhole,
+  Eye,
+  EyeOff,
+  ArrowRight,
+  CircleAlert,
+} from 'lucide-react'
 import { signIn } from '../services/auth'
+import './Auth.css'
 
 function Login() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const [formData, setFormData] = useState({
@@ -12,6 +24,7 @@ function Login() {
 
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -28,7 +41,7 @@ function Login() {
     setError('')
     setLoading(true)
 
-    const { data, error } = await signIn(
+    const { error } = await signIn(
       formData.email,
       formData.password
     )
@@ -40,67 +53,154 @@ function Login() {
     }
 
     setLoading(false)
-
-    if (data.user) {
-      navigate('/dashboard')
-    }
+    navigate('/dashboard')
   }
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <h1>Welcome Back</h1>
 
-        <p>Login to manage your finances.</p>
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
+        {/* Brand */}
+        <div className="auth-brand">
+          <div className="auth-brand-icon">
+            <WalletCards size={22} />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
+          <span>
+            {t('auth.brand')}
+          </span>
+        </div>
 
-            <input
-              id="password"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
+        {/* Header */}
+        <div className="auth-header">
+          <h1>
+            {t('auth.welcomeBack')}
+          </h1>
+
+          <p>
+            {t('auth.loginSubtitle')}
+          </p>
+        </div>
+
+        {/* Form */}
+        <form
+          className="auth-form"
+          onSubmit={handleSubmit}
+        >
+
+          {/* Email */}
+          <div className="form-group">
+            <label htmlFor="email">
+              {t('auth.email')}
+            </label>
+
+            <div className="auth-input-wrapper">
+              <Mail size={17} />
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder={t('auth.emailPlaceholder')}
+                autoComplete="email"
+                required
+              />
+            </div>
           </div>
 
+          {/* Password */}
+          <div className="form-group">
+            <label htmlFor="password">
+              {t('auth.password')}
+            </label>
+
+            <div className="auth-input-wrapper auth-password-wrapper">
+              <LockKeyhole size={17} />
+
+              <input
+                id="password"
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder={t('auth.passwordPlaceholder')}
+                autoComplete="current-password"
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() =>
+                  setShowPassword((prev) => !prev)
+                }
+                aria-label={
+                  showPassword
+                    ? t('auth.hidePassword')
+                    : t('auth.showPassword')
+                }
+              >
+                {showPassword ? (
+                  <EyeOff size={17} />
+                ) : (
+                  <Eye size={17} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Forgot Password */}
+          <div className="auth-forgot-password">
+            <Link to="/forgot-password">
+              {t('auth.forgotPassword')}
+            </Link>
+          </div>
+
+          {/* Error */}
           {error && (
-            <p className="auth-error">
-              {error}
-            </p>
+            <div className="auth-error">
+              <CircleAlert size={16} />
+
+              <span>
+                {error}
+              </span>
+            </div>
           )}
 
+          {/* Submit */}
           <button
             type="submit"
-            className="primary-button"
+            className="primary-button auth-submit-button"
             disabled={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? (
+              <span>
+                {t('auth.loggingIn')}
+              </span>
+            ) : (
+              <>
+                <span>
+                  {t('auth.login')}
+                </span>
+
+                <ArrowRight size={16} />
+              </>
+            )}
           </button>
+
         </form>
 
+        {/* Footer */}
         <p className="auth-footer">
-          Don't have an account?{' '}
-          <Link to="/register">Create Account</Link>
+          {t('auth.noAccount')}{' '}
+
+          <Link to="/register">
+            {t('auth.createAccount')}
+          </Link>
         </p>
+
       </div>
     </div>
   )

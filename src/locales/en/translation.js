@@ -409,7 +409,86 @@ categories: {
 
       logout: 'Logout',
     },
+
+
+  auth: {
+  brand: 'ZE Finance',
+
+  welcomeBack: 'Welcome Back',
+  loginSubtitle: 'Login to manage your finances.',
+
+  email: 'Email',
+  emailPlaceholder: 'Enter your email',
+
+  password: 'Password',
+  passwordPlaceholder: 'Enter your password',
+
+  login: 'Login',
+  loggingIn: 'Logging in...',
+
+  forgotPassword: 'Forgot Password?',
+  noAccount: "Don't have an account?",
+  createAccount: 'Create Account',
+
+  createAccountTitle: 'Create Account',
+  registerSubtitle: 'Start managing your finances.',
+
+  confirmPassword: 'Confirm Password',
+  confirmPasswordPlaceholder: 'Confirm your password',
+
+  creatingAccount: 'Creating account...',
+  alreadyHaveAccount: 'Already have an account?',
+
+  forgotPasswordTitle: 'Forgot Password?',
+  forgotPasswordSubtitle:
+    "Enter your email and we'll send you a password reset link.",
+
+  sendResetLink: 'Send Reset Link',
+  sending: 'Sending...',
+
+  resetLinkSent:
+    'We sent a password reset link to your email.',
+
+  backToLogin: 'Back to Login',
+
+  resetPasswordTitle: 'Create New Password',
+  resetPasswordSubtitle:
+    'Choose a new password for your account.',
+
+  newPassword: 'New Password',
+  newPasswordPlaceholder:
+    'Enter your new password',
+
+  confirmNewPasswordPlaceholder:
+    'Confirm your new password',
+
+  updatePassword: 'Update Password',
+  updating: 'Updating...',
+
+  passwordUpdated:
+    'Password updated successfully.',
+
+  passwordMinLength:
+    'Password must be at least 6 characters.',
+
+  passwordsDoNotMatch:
+    'Passwords do not match.',
+
+  showPassword: 'Show password',
+  hidePassword: 'Hide password',
+  checkYourEmail: 'Check Your Email',
+verificationEmailSent:
+  'We sent you a verification link to activate your account.',
+emailVerificationHint:
+  'Open the email and click the verification link to activate your account. Don’t forget to check your spam folder.',
+},
+
+
+
   },
+
 }
+
+
 
 export default en

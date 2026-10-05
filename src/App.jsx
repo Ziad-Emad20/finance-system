@@ -13,6 +13,8 @@ import Login from './pages/Login'
 import Categories from './pages/Categories'
 
 import ProtectedRoute from './routes/ProtectedRoute'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -20,8 +22,25 @@ function App() {
       <Routes>
 
         {/* Public Routes */}
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route
+  path="/login"
+  element={<Login />}
+/>
+
+<Route
+  path="/register"
+  element={<Register />}
+/>
+
+<Route
+  path="/forgot-password"
+  element={<ForgotPassword />}
+/>
+
+<Route
+  path="/reset-password"
+  element={<ResetPassword />}
+/>
 
         {/* Protected Routes */}
         <Route element={<ProtectedRoute />}>

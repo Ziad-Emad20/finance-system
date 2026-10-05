@@ -1,0 +1,469 @@
+/* =========================================================
+   Settings Page
+========================================================= */
+
+.settings-page {
+  width: 100%;
+  max-width: 1000px;
+  min-width: 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   Header
+========================================================= */
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.settings-header-icon {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.settings-header h1 {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.settings-header p {
+  margin: 5px 0 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   Cards
+========================================================= */
+
+.settings-card {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin-bottom: 18px;
+  padding: 21px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  margin-bottom: 21px;
+}
+
+.settings-card-icon {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+}
+
+.profile-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.security-icon {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.account-icon {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.settings-card-header h2 {
+  margin: 0;
+
+  color: var(--text-primary);
+
+  font-size: 16px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+/* =========================================================
+   Forms
+========================================================= */
+
+.settings-form {
+  width: 100%;
+}
+
+.settings-form-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.settings-password-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 15px;
+}
+
+.settings-field {
+  min-width: 0;
+}
+
+.settings-field label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: var(--text-secondary);
+
+  font-size: 11px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* =========================================================
+   Inputs
+========================================================= */
+
+.settings-input-wrapper {
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  background: var(--background);
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  color: var(--text-secondary);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.settings-input-wrapper:focus-within {
+  border-color: var(--primary);
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.08);
+
+  color: var(--primary);
+}
+
+.settings-input-wrapper input,
+.settings-input-wrapper select {
+  width: 100%;
+  min-width: 0;
+
+  height: 40px;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: var(--text-primary);
+
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.settings-input-wrapper select {
+  cursor: pointer;
+}
+
+.settings-input-wrapper input::placeholder {
+  color: #94a3b8;
+}
+
+.settings-input-disabled {
+  opacity: 0.7;
+}
+
+.settings-input-disabled input {
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   Role
+========================================================= */
+
+.settings-role-box {
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--background);
+
+  color: var(--primary);
+}
+
+.settings-role-box strong {
+  color: var(--text-primary);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-transform: capitalize;
+}
+
+/* =========================================================
+   Buttons
+========================================================= */
+
+.settings-form-footer {
+  display: flex;
+  align-items: center;
+
+  margin-top: 17px;
+}
+
+.settings-save-button {
+  min-height: 39px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 14px;
+
+  font-size: 11px;
+}
+
+/* =========================================================
+   Messages
+========================================================= */
+
+.settings-message {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 13px;
+
+  padding: 10px 12px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.settings-success {
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+
+  color: #15803d;
+}
+
+.settings-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+
+  color: #dc2626;
+}
+
+/* =========================================================
+   Logout
+========================================================= */
+
+.settings-account-card {
+  margin-bottom: 0;
+}
+
+.settings-logout-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.settings-logout-button {
+  min-height: 39px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 14px;
+
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+
+  background: #fffafa;
+
+  color: #dc2626;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.settings-logout-button:hover {
+  background: #fef2f2;
+
+  border-color: #fca5a5;
+
+  color: #b91c1c;
+}
+
+/* =========================================================
+   Tablet
+========================================================= */
+
+@media (max-width: 850px) {
+  .settings-password-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   Mobile
+========================================================= */
+
+@media (max-width: 600px) {
+  .settings-header {
+    margin-bottom: 17px;
+  }
+
+  .settings-header-icon {
+    width: 37px;
+    height: 37px;
+  }
+
+  .settings-header h1 {
+    font-size: 23px;
+  }
+
+  .settings-header p {
+    font-size: 11px;
+  }
+
+  .settings-card {
+    padding: 15px;
+    margin-bottom: 13px;
+
+    border-radius: 14px;
+  }
+
+  .settings-card-header {
+    margin-bottom: 17px;
+  }
+
+  .settings-card-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .settings-card-header h2 {
+    font-size: 14px;
+  }
+
+  .settings-form-grid,
+  .settings-password-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .settings-form-footer {
+    margin-top: 15px;
+  }
+
+  .settings-save-button,
+  .settings-logout-button {
+    width: 100%;
+  }
+
+  .settings-logout-wrapper {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   RTL
+========================================================= */
+
+[dir='rtl'] .settings-header,
+[dir='rtl'] .settings-card-header,
+[dir='rtl'] .settings-input-wrapper,
+[dir='rtl'] .settings-role-box,
+[dir='rtl'] .settings-message {
+  direction: rtl;
+}
+
+[dir='rtl'] .settings-input-wrapper input,
+[dir='rtl'] .settings-input-wrapper select {
+  text-align: right;
+}
